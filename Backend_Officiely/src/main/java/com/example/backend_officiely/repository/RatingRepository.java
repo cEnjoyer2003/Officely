@@ -9,19 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
-    Rating CreateRating(Rating rating);
 
-    Rating UpdateRatingById(String rating_id, Rating rating);
-
-    Optional<Rating> findByOfficeId(String office_id);
-
-    List<Rating> findByUserId(String user_id);
-
-    List<Rating> getAllRatings();
-
-    void deleteById(String rating_id);
-
-    List<Rating> sortByRating();
 
 
 
