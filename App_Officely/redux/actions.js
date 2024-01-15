@@ -1,15 +1,14 @@
-export const SET_DATA = "SET_DATA";
-export const SET_LOADING = "SET_LOADING";
-// export const SET_SEARCH_RESULT = "SET_SEARCH_RESULT";
+export const SET_OFFICE_START_DATE = "SET_OFFICE_START_DATE";
+export const SET_OFFICE_END_DATE = "SET_OFFICE_END_DATE";
 
-export const setData = (countires) => ({
-    type: SET_DATA,
-    payload: countires,
+export const setOfficeStartDate = (date) => ({
+    type: SET_OFFICE_START_DATE,
+    payload: date,
 });
 
-export const setLoading = (loading) => ({
-    type: SET_LOADING,
-    payload: loading,
+export const setOfficeEndDate = (date) => ({
+    type: SET_OFFICE_END_DATE,
+    payload: date,
 });
 
 // export const setSearchResult = (countires) => ({

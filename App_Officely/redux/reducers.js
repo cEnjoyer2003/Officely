@@ -1,49 +1,36 @@
-import { SET_DATA, SET_LOADING } from "./actions";
+import { SET_OFFICE_START_DATE, SET_OFFICE_END_DATE } from "./actions";
 
 const initialState = {
-	loading: true,
-	countries: [],
-	// searching: false,
-	// filteredCountries: [],
+    officeStartDate: "",
+    officeEndDate: "",
 };
 
 const rootReducer = (state = initialState, action) => {
-	switch (action.type) {
-		case SET_DATA:
-			return setData(state, action.payload);
-		case SET_LOADING:
-			return setLoading(state, action.payload);
-	
-		// case SET_SEARCH_RESULT:
-		// 	return setSearchResult(state, action.payload)
-		default:
-			return state;
-	}
+    switch (action.type) {
+        case SET_OFFICE_START_DATE:
+            return setOfficeStartDate(state, action.payload);
+        case SET_OFFICE_END_DATE:
+            return setOfficeEndDate(state, action.payload);
+        default:
+            return state;
+    }
 };
 
-const setData = (state, countries) => {
-	return {
-		...state,
-		loading : false,
-		countries,
-	};
-}
+const setOfficeStartDate = (state, date) => {
+	console.log(state);
+    return {
+        ...state,
+        officeStartDate: date,
+    };
+};
 
-const setLoading = (state, loading) => {
-	return {
-		...state,
-		loading,
-	};
-}
+const setOfficeEndDate = (state, date) => {
+	console.log(state);
 
-
-const setSearchResult = (state, countries) => {
-	return {
-		...state,
-		loading : false,
-		filteredCountries: countries,
-	};
-}
-
+    return {
+        ...state,
+        officeEndDate: date,
+    };
+};
 
 export default rootReducer;
