@@ -13,16 +13,17 @@ const Tab = createBottomTabNavigator();
 const AppNavigator = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Office"
+            initialRouteName="OfficeTab"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
 
-                    if (route.name === "Office") {
+                    if (route.name === "OfficeTab") {
                         iconName = focused ? "briefcase" : "briefcase-outline";
-                    } else if (route.name === "Profile") {
+                    } else if (route.name === "ProfileTab") {
                         iconName = focused ? "person-circle" : "person-circle-outline";
                     }
+                    
                     return (
                         <Ionicons name={iconName} size={size} color={color} />
                     );
@@ -32,8 +33,8 @@ const AppNavigator = () => {
                 headerShown: false,
             })}
         >
-            <Tab.Screen name="Office" component={OfficeTab} />
-            <Tab.Screen name="Profile" component={ProfileTab} />
+            <Tab.Screen name="OfficeTab" component={OfficeTab} />
+            <Tab.Screen name="ProfileTab" component={ProfileTab} />
             {/* <Tab.Screen name="Quit" component={Quit} options={{ headerShown: false }}/> */}
         </Tab.Navigator>
     );

@@ -1,8 +1,9 @@
-import { SET_OFFICE_START_DATE, SET_OFFICE_END_DATE } from "./actions";
+import { SET_OFFICE_START_DATE, SET_OFFICE_END_DATE, SELECT_OFFICE_CITY } from "./actions";
 
 const initialState = {
     officeStartDate: "",
     officeEndDate: "",
+	officeSelectedCity: "",
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -11,13 +12,14 @@ const rootReducer = (state = initialState, action) => {
             return setOfficeStartDate(state, action.payload);
         case SET_OFFICE_END_DATE:
             return setOfficeEndDate(state, action.payload);
+		case SELECT_OFFICE_CITY:
+            return selectOfficeCity(state, action.payload);
         default:
             return state;
     }
 };
 
 const setOfficeStartDate = (state, date) => {
-	console.log(state);
     return {
         ...state,
         officeStartDate: date,
@@ -25,11 +27,16 @@ const setOfficeStartDate = (state, date) => {
 };
 
 const setOfficeEndDate = (state, date) => {
-	console.log(state);
-
     return {
         ...state,
         officeEndDate: date,
+    };
+};
+
+const selectOfficeCity = (state, city) => {
+    return {
+        ...state,
+		officeSelectedCity: city,
     };
 };
 

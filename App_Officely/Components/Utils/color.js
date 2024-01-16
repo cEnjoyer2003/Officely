@@ -5,6 +5,8 @@ export const ThemeColors = {
     Side : "#59A2D0",
     Background : '#CFC8B9',
     Plain : "#A0B2D4",
+    White : "#FFFFFF",
+
     Focus : "#DC996B",
     Warning : "#A92803"
 }

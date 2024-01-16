@@ -3,14 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { StyleSheet, View, Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import OfficeSearch from "./OfficeSearch";
+import OfficeSearchPage from "./OfficeSearchPage";
+import OfficeResultPage from "./OfficeResultPage";
 
 const Stack = createNativeStackNavigator();
 
 const OfficeTab = () => {
     return (
-        <Stack.Navigator initialRouteName="OfficeSearch">
-            <Stack.Screen name="OfficeSearch" component={OfficeSearch} />
+        <Stack.Navigator initialRouteName="Search">
+            <Stack.Screen name="Search" component={OfficeSearchPage} />
+            <Stack.Screen name="Office" component={OfficeResultPage} />
         </Stack.Navigator>
     );
 };

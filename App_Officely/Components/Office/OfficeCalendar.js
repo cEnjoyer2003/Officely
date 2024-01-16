@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View, Text } from "react-native";
+import { useState, useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { ThemeColors } from "../Utils/color";
 import moment from "moment";
@@ -32,9 +32,13 @@ const OfficeCalendar = () => {
         }
         useSelectedRange(selected);
     };
+
+    useEffect(() => setDates(startDate, endDate), []);
+
     return (
         <View>
             <Calendar
+                style={styles.container}
                 minDate={moment().format("YYYY-MM-DD")}
                 onDayPress={(day) => {
                     let selecting = startDate !== "" && endDate === "";
@@ -66,7 +70,7 @@ const OfficeCalendar = () => {
                     [endDate]: {
                         selected: true,
                         disableTouchEvent: false,
-                        startingDay: startDate===endDate,
+                        startingDay: startDate === endDate,
                         endingDay: true,
                         color: ThemeColors.Focus,
                     },
@@ -75,5 +79,11 @@ const OfficeCalendar = () => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: ThemeColors.White,
+    }
+});
 
 export default OfficeCalendar;
