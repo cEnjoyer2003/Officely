@@ -1,7 +1,9 @@
 package com.example.backend_officiely.dtos;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class OfficeDto {
     private String office_id;
