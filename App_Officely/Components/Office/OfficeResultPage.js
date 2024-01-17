@@ -9,7 +9,7 @@ const officeData = [
         Name: "TechHub Workspace",
         Address: "123 Main Street",
         facilities: "Meeting rooms, coworking spaces",
-        contact_info: "contact@techhub.com",
+        Contact: "contact@techhub.com",
         Rating: 4.5,
         Price: 150.0,
         wifi: true,
@@ -21,7 +21,7 @@ const officeData = [
         Name: "Innovate Office Suites",
         Address: "456 Oak Avenue",
         facilities: "Private offices, event spaces",
-        contact_info: "info@innovateoffices.com",
+        Contact: "info@innovateoffices.com",
         Rating: 4.2,
         Price: 200.0,
         wifi: true,
@@ -32,7 +32,7 @@ const officeData = [
         Name: "Innovate Office Suites",
         Address: "456 Oak Avenue",
         facilities: "Private offices, event spaces",
-        contact_info: "info@innovateoffices.com",
+        Contact: "info@innovateoffices.com",
         Rating: 4.2,
         Price: 200.0,
         wifi: true,
@@ -43,7 +43,7 @@ const officeData = [
         Name: "Innovate Office Suites",
         Address: "456 Oak Avenue",
         facilities: "Private offices, event spaces",
-        contact_info: "info@innovateoffices.com",
+        Contact: "info@innovateoffices.com",
         Rating: 4.2,
         Price: 200.0,
         wifi: true,
@@ -54,7 +54,7 @@ const officeData = [
         Name: "Innovate Office Suites",
         Address: "456 Oak Avenue",
         facilities: "Private offices, event spaces",
-        contact_info: "info@innovateoffices.com",
+        Contact: "info@innovateoffices.com",
         Rating: 4.2,
         Price: 200.0,
         wifi: true,
@@ -73,7 +73,7 @@ const OfficeResultPage = ({ navigation }) => {
                 <FlatList
                     data={officeData}
                     renderItem={({ item }) => (
-                        <OfficeCard data={item}></OfficeCard>
+                        <OfficeCard data={item} navigation={navigation}></OfficeCard>
                     )}
                     // refreshControl={
                     //     <RefreshControl
