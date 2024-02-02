@@ -3,16 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { StyleSheet, View, Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import ProfileHome from "./ProfileHome";
+import ParkSearchPage from "./ParkSearchPage";
 
 const Stack = createNativeStackNavigator();
 
-const ProfileTab = () => {
+const ParkTab = () => {
     return (
-        <View>
-            <ProfileHome></ProfileHome>
-        </View>
+        <Stack.Navigator initialRouteName="Search">
+            <Stack.Screen name="Search" component={ParkSearchPage} />
+        </Stack.Navigator>
     );
 };
 
-export default ProfileTab;
+export default ParkTab;

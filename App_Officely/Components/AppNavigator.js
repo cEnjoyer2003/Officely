@@ -6,6 +6,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import OfficeTab from "./Office/OfficeTab";
 import ProfileTab from "./Profile/ProfileTab";
+import ParkTab from "./Park/ParkTab";
 import { ThemeColors } from "./Utils/color";
 
 const Tab = createBottomTabNavigator();
@@ -17,13 +18,28 @@ const AppNavigator = () => {
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
-
-                    if (route.name === "OfficeTab") {
-                        iconName = focused ? "briefcase" : "briefcase-outline";
-                    } else if (route.name === "ProfileTab") {
-                        iconName = focused ? "person-circle" : "person-circle-outline";
+                    switch (route.name) {
+                        case "OfficeTab":
+                            iconName = focused
+                                ? "briefcase"
+                                : "briefcase-outline";
+                            break;
+                        case "ParkTab":
+                            iconName = focused
+                                ? "car"
+                                : "car-outline";
+                            break;
+                        case "ProfileTab":
+                            iconName = focused
+                                ? "person-circle"
+                                : "person-circle-outline";
+                            break;
+                        default:
+                            iconName = focused
+                                ? "add-circle"
+                                : "add-circle-outline";
+                            break;
                     }
-                    
                     return (
                         <Ionicons name={iconName} size={size} color={color} />
                     );
@@ -34,6 +50,7 @@ const AppNavigator = () => {
             })}
         >
             <Tab.Screen name="OfficeTab" component={OfficeTab} />
+            <Tab.Screen name="ParkTab" component={ParkTab} />
             <Tab.Screen name="ProfileTab" component={ProfileTab} />
             {/* <Tab.Screen name="Quit" component={Quit} options={{ headerShown: false }}/> */}
         </Tab.Navigator>

@@ -11,8 +11,6 @@ const OfficeCalendar = () => {
     const endDate = useSelector((state) => state.officeEndDate);
     const dispatch = useDispatch();
 
-    // const [startDate, useStartDate] = useState();
-    // const [endDate, useEndDate] = useState();
     const [selectedRange, useSelectedRange] = useState({});
     const setDates = (start, end) => {
         var selected = {};
