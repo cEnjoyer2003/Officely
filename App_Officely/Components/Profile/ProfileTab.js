@@ -3,14 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { StyleSheet, View, Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import ProfileHome from "./ProfileHome";
+import ProfileHomeScreen from "./ProfileHomeScreen";
+import BookingDetailScreen from "./BookingDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
 const ProfileTab = () => {
     return (
-        <Stack.Navigator initialRouteName="ProfileHome">
-            <Stack.Screen name="ProfileHome" component={ProfileHome} />
+        <Stack.Navigator initialRouteName="Profile">
+            <Stack.Screen name="Profile" component={ProfileHomeScreen} />
+            <Stack.Screen name="BookingDetail" component={BookingDetailScreen} />
         </Stack.Navigator>
     );
 };

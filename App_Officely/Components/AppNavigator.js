@@ -6,22 +6,43 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import OfficeTab from "./Office/OfficeTab";
 import ProfileTab from "./Profile/ProfileTab";
-import { ThemeColors } from "./Utils/color";
+// import ParkTab from "./Park/ParkTab";
+import { ThemeColors } from "./Utils/Colors";
+import LoginTab from "./Login/LoginTab";
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Office"
+            initialRouteName="OfficeTab"
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
-
-                    if (route.name === "Office") {
-                        iconName = focused ? "briefcase" : "briefcase-outline";
-                    } else if (route.name === "Profile") {
-                        iconName = focused ? "person-circle" : "person-circle-outline";
+                    switch (route.name) {
+                        case "OfficeTab":
+                            iconName = focused
+                                ? "briefcase"
+                                : "briefcase-outline";
+                            break;
+                        case "ParkTab":
+                            iconName = focused ? "car" : "car-outline";
+                            break;
+                        case "ProfileTab":
+                            iconName = focused
+                                ? "person-circle"
+                                : "person-circle-outline";
+                            break;
+                        case "Quit":
+                            iconName = focused
+                                ? "log-out"
+                                : "log-out-outline";
+                            break;
+                        default:
+                            iconName = focused
+                                ? "add-circle"
+                                : "add-circle-outline";
+                            break;
                     }
                     return (
                         <Ionicons name={iconName} size={size} color={color} />
@@ -32,9 +53,10 @@ const AppNavigator = () => {
                 headerShown: false,
             })}
         >
-            <Tab.Screen name="Office" component={OfficeTab} />
-            <Tab.Screen name="Profile" component={ProfileTab} />
-            {/* <Tab.Screen name="Quit" component={Quit} options={{ headerShown: false }}/> */}
+            <Tab.Screen name="OfficeTab" component={OfficeTab} />
+            {/* <Tab.Screen name="ParkTab" component={ParkTab} /> */}
+            <Tab.Screen name="ProfileTab" component={ProfileTab} />
+            <Tab.Screen name="Quit" component={LoginTab} />
         </Tab.Navigator>
     );
 };
