@@ -1,13 +1,19 @@
 import {
+    SET_USER,
     SET_OFFICE_START_DATE,
     SET_OFFICE_END_DATE,
     SELECT_OFFICE_CITY,
     UPDATE_OFFICE_DATA,
     UPDATE_PARKING_DATA,
-    UPDATE_BOOKING_DATA
+    UPDATE_BOOKING_DATA,
 } from "./actions";
 
 const initialState = {
+    UserInfo: {
+        Email: "boxuan.zhang.stud@pw.edu.pl",
+        FirstName: "Boxuan",
+        LastName: "Zhang",
+    },
     OfficeSearchOptions: {
         StartDate: "",
         EndDate: "",
@@ -87,6 +93,8 @@ const initialState = {
 
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_USER:
+            return setUser(state, action.payload);
         case SET_OFFICE_START_DATE:
             return setOfficeStartDate(state, action.payload);
         case SET_OFFICE_END_DATE:
@@ -104,8 +112,23 @@ const rootReducer = (state = initialState, action) => {
     }
 };
 
+const setUser = (state, info) => {
+    const UserInfo = {
+        Email : info.Email,
+        FirstName: info.FirstName,
+        LastName : info.LastName, 
+    };
+    return {
+        ...state,
+        UserInfo,
+    };
+};
+
 const setOfficeStartDate = (state, date) => {
-    const OfficeSearchOptions = { ...state.OfficeSearchOptions, StartDate: date };
+    const OfficeSearchOptions = {
+        ...state.OfficeSearchOptions,
+        StartDate: date,
+    };
     return {
         ...state,
         OfficeSearchOptions,

@@ -6,8 +6,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import OfficeTab from "./Office/OfficeTab";
 import ProfileTab from "./Profile/ProfileTab";
-import ParkTab from "./Park/ParkTab";
+// import ParkTab from "./Park/ParkTab";
 import { ThemeColors } from "./Utils/Colors";
+import LoginTab from "./Login/LoginTab";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,14 +26,17 @@ const AppNavigator = () => {
                                 : "briefcase-outline";
                             break;
                         case "ParkTab":
-                            iconName = focused
-                                ? "car"
-                                : "car-outline";
+                            iconName = focused ? "car" : "car-outline";
                             break;
                         case "ProfileTab":
                             iconName = focused
                                 ? "person-circle"
                                 : "person-circle-outline";
+                            break;
+                        case "Quit":
+                            iconName = focused
+                                ? "log-out"
+                                : "log-out-outline";
                             break;
                         default:
                             iconName = focused
@@ -50,9 +54,9 @@ const AppNavigator = () => {
             })}
         >
             <Tab.Screen name="OfficeTab" component={OfficeTab} />
-            <Tab.Screen name="ParkTab" component={ParkTab} />
+            {/* <Tab.Screen name="ParkTab" component={ParkTab} /> */}
             <Tab.Screen name="ProfileTab" component={ProfileTab} />
-            {/* <Tab.Screen name="Quit" component={Quit} options={{ headerShown: false }}/> */}
+            <Tab.Screen name="Quit" component={LoginTab} />
         </Tab.Navigator>
     );
 };

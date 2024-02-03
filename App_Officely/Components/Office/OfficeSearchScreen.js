@@ -14,6 +14,10 @@ const OfficeSearchScreen = ({ navigation }) => {
 
     const cityData = useSelector((state) => state.CityData);
     const city = useSelector((state) => state.OfficeSearchOptions.City);
+    const startDate = useSelector(
+        (state) => state.OfficeSearchOptions.StartDate
+    );
+    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
 
     const dispatch = useDispatch();
     const [options, setOptions] = useState([]);
@@ -37,9 +41,10 @@ const OfficeSearchScreen = ({ navigation }) => {
 
     const placeholder = {
         label: "Select a city...",
-        value: null,
+        value: "",
         color: ThemeColors.Main,
     };
+    
     return (
         <View>
             <Card style={styles.container}>
@@ -66,6 +71,9 @@ const OfficeSearchScreen = ({ navigation }) => {
                             dispatch(searchOffice());
                             navigation.push("Office");
                         }}
+                        disabled={
+                            city === "" || startDate === "" || endDate === ""
+                        }
                     >
                         Search
                     </Button>
