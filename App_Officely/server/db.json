@@ -1,5 +1,5 @@
 {
-    "Office": [
+    "OfficeData": [
         {
             "office_id": "123e4567-e89b-12d3-a456-426614174001",
             "Name": "TechHub Workspace",
@@ -61,15 +61,13 @@
             "PictureUri": "https://plus.unsplash.com/premium_photo-1661775434014-9c0e8d71de03?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         }
     ],
-    "liked": [
-        {
-            "id": 1
-        },
-        {
-            "id": 5
-        },
-        {
-            "id": 6
-        }
-    ]
+    "ParkingData": [{}],
+    "BookingData": [{
+        
+    }],
+    "UserData": {
+        "email": "boxuan.zhang.stud@pw.edu.pl",
+        "first_name": "boxuan",
+        "last_name": "zhang"
+    }
 }

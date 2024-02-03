@@ -7,7 +7,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import OfficeTab from "./Office/OfficeTab";
 import ProfileTab from "./Profile/ProfileTab";
 import ParkTab from "./Park/ParkTab";
-import { ThemeColors } from "./Utils/color";
+import { ThemeColors } from "./Utils/Colors";
 
 const Tab = createBottomTabNavigator();
 

@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { ThemeColors } from "../Utils/color";
+import { ThemeColors } from "../Utils/Colors";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { setOfficeStartDate, setOfficeEndDate } from "../../redux/actions";
 
 const OfficeCalendar = () => {
-    const startDate = useSelector((state) => state.officeStartDate);
-    const endDate = useSelector((state) => state.officeEndDate);
+    const startDate = useSelector((state) => state.OfficeSearchOptions.StartDate);
+    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
     const dispatch = useDispatch();
 
     const [selectedRange, useSelectedRange] = useState({});

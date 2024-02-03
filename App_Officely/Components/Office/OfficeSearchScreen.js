@@ -1,24 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Calendar } from "react-native-calendars";
-import { ThemeColors } from "../Utils/color";
+import { ThemeColors } from "../Utils/Colors";
 import { useSelector, useDispatch } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import { Card, Button } from "react-native-paper";
 
 import OfficeCalendar from "./OfficeCalendar";
 import { selectOfficeCity } from "../../redux/actions";
+import { fetchAvaliableCities, searchOffice } from "../../redux/thunk";
 
-const OfficeSearchPage = ({ navigation }) => {
+const OfficeSearchScreen = ({ navigation }) => {
     // const [selectedValue, setSelectedValue] = useState(null);
-    const city = useSelector((state) => state.officeSelectedCity);
+
+    const cityData = useSelector((state) => state.CityData);
+    const city = useSelector((state) => state.OfficeSearchOptions.City);
 
     const dispatch = useDispatch();
-    const options = [
-        { label: "Warszawa", value: "Warszawa" },
-        { label: "Gdańsk", value: "Gdańsk" },
-        { label: "Kraków", value: "Kraków" },
-    ];
+    const [options, setOptions] = useState([]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            // The screen is focused
+            // Call any action
+            dispatch(fetchAvaliableCities());
+            setOptions(
+                cityData.map((item) => ({
+                    label: item.Name,
+                    value: item.Name,
+                }))
+            );
+            console.log(cityData);
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [navigation]);
 
     const placeholder = {
         label: "Select a city...",
@@ -48,6 +63,7 @@ const OfficeSearchPage = ({ navigation }) => {
                     <Button
                         mode="elevated"
                         onPress={() => {
+                            dispatch(searchOffice());
                             navigation.push("Office");
                         }}
                     >
@@ -73,4 +89,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default OfficeSearchPage;
+export default OfficeSearchScreen;

@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
+import { Button } from "react-native-paper";
 import { Header as HeaderRNE, HeaderProps, Icon, Avatar } from "@rneui/themed";
 
-import { ThemeColors } from "../Utils/color";
+import { ThemeColors } from "../Utils/Colors";
 
-const ProfileHome = () => {
+const ProfileHomeScreen = () => {
     return (
         <View>
             <HeaderRNE
@@ -18,7 +19,9 @@ const ProfileHome = () => {
                         />
                         <View>
                             <Text style={styles.text}>boxuan@gmail.com</Text>
-                            <Button title="Change Password"></Button>
+                            <Button mode="elevated" onPress={() => {}}>
+                                change password
+                            </Button>
                         </View>
                     </View>
                 }
@@ -31,12 +34,12 @@ const ProfileHome = () => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        width: 500
+        width: 500,
     },
-    text :{
+    text: {
         color: ThemeColors.White,
-        fontSize: 16
-    }
+        fontSize: 16,
+    },
 });
 
-export default ProfileHome;
+export default ProfileHomeScreen;

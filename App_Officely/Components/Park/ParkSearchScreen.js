@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { ThemeColors } from "../Utils/color";
+import { ThemeColors } from "../Utils/Colors";
 import { useSelector, useDispatch } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import { Card, Button } from "react-native-paper";
 
-const ParkSearchPage = ({ navigation }) => {
+const ParkSearchScreen = ({ navigation }) => {
     // const [selectedValue, setSelectedValue] = useState(null);
     const city = useSelector((state) => state.officeSelectedCity);
 
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ParkSearchPage;
+export default ParkSearchScreen;

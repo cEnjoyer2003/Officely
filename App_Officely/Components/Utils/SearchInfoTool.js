@@ -7,13 +7,13 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { SegmentedButtons, Button, TextInput } from "react-native-paper";
-import { ThemeColors } from "./color";
+import { ThemeColors } from "./Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const SearchInfoTool = () => {
-    const startDate = useSelector((state) => state.officeStartDate);
-    const endDate = useSelector((state) => state.officeEndDate);
-    const city = useSelector((state) => state.officeSelectedCity);
+    const startDate = useSelector((state) => state.OfficeSearchOptions.StartDate);
+    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
+    const city = useSelector((state) => state.OfficeSearchOptions.City);
 
     return (
         <View style={styles.container}>

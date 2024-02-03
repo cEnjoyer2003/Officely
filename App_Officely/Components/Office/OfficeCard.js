@@ -7,7 +7,7 @@ import {
     Image,
 } from "react-native";
 import { Card } from "react-native-paper";
-import { ThemeColors } from "../Utils/color";
+import { ThemeColors } from "../Utils/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const OfficeCard = ({ data: officeData, navigation }) => {
