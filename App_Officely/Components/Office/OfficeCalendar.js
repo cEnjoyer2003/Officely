@@ -24,7 +24,7 @@ const OfficeCalendar = () => {
                 [m.format("YYYY-MM-DD")]: {
                     selected: true,
                     disableTouchEvent: false,
-                    color: ThemeColors.Focus,
+                    color: ThemeColors.Orange,
                 },
             };
         }
@@ -57,12 +57,12 @@ const OfficeCalendar = () => {
                 markedDates={{
                     ...selectedRange,
                     [moment().format("YYYY-MM-DD")]: {
-                        textColor: ThemeColors.Side,
+                        textColor: ThemeColors.LightBlue,
                     },
                     [startDate]: {
                         selected: true,
                         disableTouchEvent: false,
-                        color: ThemeColors.Focus,
+                        color: ThemeColors.Orange,
                         startingDay: true,
                     },
                     [endDate]: {
@@ -70,7 +70,7 @@ const OfficeCalendar = () => {
                         disableTouchEvent: false,
                         startingDay: startDate === endDate,
                         endingDay: true,
-                        color: ThemeColors.Focus,
+                        color: ThemeColors.Orange,
                     },
                 }}
             />
@@ -80,7 +80,7 @@ const OfficeCalendar = () => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: ThemeColors.White,
+        backgroundColor: ThemeColors.PureWhite,
     }
 });
 

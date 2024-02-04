@@ -10,13 +10,15 @@ const Stack = createNativeStackNavigator();
 
 const LoginTab = () => {
     return (
-        <Stack.Navigator initialRouteName="Signin">
+        <Stack.Navigator
+            initialRouteName="Signin"
+            screenOptions={{ headerShown: false }}
+        >
             <Stack.Screen name="Signin" component={SigninScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
             <Stack.Screen name="ResetPW" component={ResetPasswordScreen} />
         </Stack.Navigator>
     );
 };
-
 
 export default LoginTab;

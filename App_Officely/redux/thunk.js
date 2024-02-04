@@ -12,28 +12,28 @@ const BASE_URL = "http://localhost:3001";
 // };
 
 export const fetchAvaliableCities = () => async (dispatch, getState) => {
-    try {
-        const response = await fetch(`${BASE_URL}/Office/search`, {
-            method: "GET",
-        }).then(
-            (resp) => {
-                if (resp.ok)
-                    return resp.json();
-                else
-                    throw resp;
-            }
-        )
-        dispatch(toggleLiked(productId));
-        // console.log(response);
-        // dispatch(setListLiked(response));
-    } catch (e) {
-        console.error(e.message);
-        dispatch(setListLiked([]));
-    }
+    // try {
+    //     const response = await fetch(`${BASE_URL}/Office/search`, {
+    //         method: "GET",
+    //     }).then(
+    //         (resp) => {
+    //             if (resp.ok)
+    //                 return resp.json();
+    //             else
+    //                 throw resp;
+    //         }
+    //     )
+    //     // dispatch(toggleLiked(productId));
+    //     // console.log(response);
+    //     // dispatch(setListLiked(response));
+    // } catch (e) {
+    //     // console.error(e.message);
+    //     // dispatch(setListLiked([]));
+    // }
     // TODO
 };
 
-export const searchOffice = (options) => async (dispatch, getState) => {
+export const searchOffice = () => async (dispatch, getState) => {
     // TODO
 };
 

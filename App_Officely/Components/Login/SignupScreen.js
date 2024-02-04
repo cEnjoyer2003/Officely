@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     },
     link: {
         // fontSize: 20,
-        color: ThemeColors.Main,
+        color: ThemeColors.Blue,
         textDecorationLine: "underline",
     },
 });

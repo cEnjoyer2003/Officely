@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     card: {
         // marginHorizontal : 8,
         marginVertical: 4,
-        backgroundColor: ThemeColors.White,
+        backgroundColor: ThemeColors.PureWhite,
         overflow: "hidden"
     },
     title: {

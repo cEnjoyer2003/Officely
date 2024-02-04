@@ -5,14 +5,16 @@ import { useDispatch } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ConfirmBox from "../Utils/ConfirmBox";
 import { useState } from "react";
+import HeaderBar from "../Utils/HeaderBar";
 
 const OfficeDetailScreen = ({ route, navigation }) => {
-    const [confirmBoxVisible, setCBVisible] = useState(true);
+    const [confirmBoxVisible, setCBVisible] = useState(false);
     const dispatch = useDispatch();
     const officeData = route.params.data;
 
     return (
         <View>
+            <HeaderBar title={"Office"} back={()=>navigation.pop()}></HeaderBar>
             <ConfirmBox
                 visible={confirmBoxVisible}
                 content={"Confirm Booking..."}
@@ -75,7 +77,7 @@ const OfficeDetailScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     card: {
         marginVertical: 4,
-        backgroundColor: ThemeColors.White,
+        backgroundColor: ThemeColors.PureWhite,
         overflow: "hidden",
     },
     title: {

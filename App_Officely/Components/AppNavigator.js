@@ -48,8 +48,8 @@ const AppNavigator = () => {
                         <Ionicons name={iconName} size={size} color={color} />
                     );
                 },
-                tabBarActiveTintColor: ThemeColors.Focus,
-                tabBarInactiveTintColor: ThemeColors.Plain,
+                tabBarActiveTintColor: ThemeColors.Orange,
+                tabBarInactiveTintColor: ThemeColors.LightBlue,
                 headerShown: false,
             })}
         >

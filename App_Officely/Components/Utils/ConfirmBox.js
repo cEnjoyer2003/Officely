@@ -24,7 +24,7 @@ const ConfirmBox = ({ content, visible, cancelHandler, confirmHandler }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: ThemeColors.White,
+        backgroundColor: ThemeColors.PureWhite,
         // padding: 20,
         marginHorizontal: 40,
         marginTop: 200,

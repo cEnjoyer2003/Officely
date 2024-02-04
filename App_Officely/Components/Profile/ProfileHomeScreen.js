@@ -4,12 +4,13 @@ import { Button } from "react-native-paper";
 import { Header as HeaderRNE, HeaderProps, Icon, Avatar } from "@rneui/themed";
 
 import { ThemeColors } from "../Utils/Colors";
+import HeaderBar from "../Utils/HeaderBar";
 
 const ProfileHomeScreen = () => {
     return (
         <View>
-            <HeaderRNE
-                backgroundColor={ThemeColors.Side}
+            {/* <HeaderRNE
+                backgroundColor={ThemeColors.LightBlue}
                 leftComponent={
                     <View style={styles.container}>
                         <Avatar
@@ -26,7 +27,7 @@ const ProfileHomeScreen = () => {
                     </View>
                 }
                 centerComponent={<View></View>}
-            ></HeaderRNE>
+            ></HeaderRNE> */}
             <></>
         </View>
     );

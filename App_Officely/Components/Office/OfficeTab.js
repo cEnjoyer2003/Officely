@@ -11,11 +11,13 @@ const Stack = createNativeStackNavigator();
 
 const OfficeTab = () => {
     return (
-        <Stack.Navigator initialRouteName="Search">
+        <Stack.Navigator
+            initialRouteName="Search"
+            screenOptions={{ headerShown: false }}
+        >
             <Stack.Screen name="Search" component={OfficeSearchScreen} />
             <Stack.Screen name="Office" component={OfficeResultScreen} />
             <Stack.Screen name="Detail" component={OfficeDetailScreen} />
-
         </Stack.Navigator>
     );
 };
