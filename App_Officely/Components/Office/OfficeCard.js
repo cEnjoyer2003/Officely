@@ -15,7 +15,6 @@ const OfficeCard = ({ data: officeData, navigation }) => {
         <TouchableOpacity
             onPress={() => navigation.push("Detail", { data: officeData })}
         >
-            {/* // TODO: Optimize animation of touching */}
             <Card style={styles.card}>
                 <Card.Content>
                     <Image
@@ -54,12 +53,12 @@ const styles = StyleSheet.create({
     card: {
         // marginHorizontal : 8,
         marginVertical: 4,
-        backgroundColor: ThemeColors.White,
+        backgroundColor: ThemeColors.PureWhite,
         overflow: "hidden"
     },
     title: {
         fontSize: 22,
-        fontWeight: "700", //TODO : NOT working here
+        fontWeight: "700", 
         // fontFamily: "monospace", //TODO : Find working font
         // marginBottom:5,
     },

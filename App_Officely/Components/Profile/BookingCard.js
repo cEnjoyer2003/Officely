@@ -1,12 +1,11 @@
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View } from "react-native";
 
-
-const BookingCard  = ({data: officeData, navigation})=>{
+const BookingCard = ({ data: bookingData, navigation }) => {
     return (
-            <TouchableOpacity>
-                <Text></Text>
-            </TouchableOpacity>
-    )
-}
+        <TouchableOpacity>
+            <Text></Text>
+        </TouchableOpacity>
+    );
+};
 
 export default BookingCard;

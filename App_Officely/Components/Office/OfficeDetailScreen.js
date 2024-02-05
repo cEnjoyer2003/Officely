@@ -1,26 +1,117 @@
 import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
-import { Card, Button } from "react-native-paper";
+import { Card, Button, Divider } from "react-native-paper";
 import { ThemeColors } from "../Utils/Colors";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ConfirmBox from "../Utils/ConfirmBox";
 import { useState } from "react";
+import HeaderBar from "../Utils/HeaderBar";
+import { bookOffice } from "../../redux/thunk";
 
 const OfficeDetailScreen = ({ route, navigation }) => {
-    const [confirmBoxVisible, setCBVisible] = useState(true);
+    const startDate = useSelector(
+        (state) => state.OfficeSearchOptions.StartDate
+    );
+    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
+    const city = useSelector((state) => state.OfficeSearchOptions.City);
+
+    const [confirmBoxVisible, setConfirmVisible] = useState(false);
+    const [parkBoxVisible, setParkVisible] = useState(false);
+
     const dispatch = useDispatch();
     const officeData = route.params.data;
 
+    const confirmBookingHandler = () => {
+        dispatch(bookOffice());
+        setConfirmVisible(false);
+        setParkVisible(true);
+    };
+
+    const confirmToParklyHandler = () => {
+        // dispatch(bookOffice());
+        setParkVisible(false);
+        // setParkVisible(true);
+        navigation.push("Parkly", {});
+    };
+
     return (
         <View>
+            <HeaderBar
+                title={"Office"}
+                back={() => navigation.pop()}
+            ></HeaderBar>
             <ConfirmBox
                 visible={confirmBoxVisible}
-                content={"Confirm Booking..."}
-                cancelHandler={() => setCBVisible(false)}
-                confirmHandler={() => {
-                    setCBVisible(false);
-                }}
-            ></ConfirmBox>
+                title={"Confirm Booking..."}
+                cancelHandler={() => setConfirmVisible(false)}
+                confirmHandler={confirmBookingHandler}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: "column",
+                        // alignItems: "center",
+                        justifyContent: "space-between",
+                        marginVertical: 10,
+                    }}
+                >
+                    <Text style={styles.text}>Date:</Text>
+                    <Text style={[styles.text, { color: ThemeColors.Blue }]}>
+                        {startDate} - {endDate}
+                    </Text>
+                    <Divider style={styles.divider}></Divider>
+                    <Text style={styles.text}>
+                        City:{" "}
+                        <Text style={{ color: ThemeColors.Blue }}>{city}</Text>
+                    </Text>
+                    <Divider style={styles.divider}></Divider>
+                    <Text style={styles.text}>Office Address: </Text>
+                    <Text style={[styles.text, { color: ThemeColors.Blue }]}>
+                        {officeData.Address}
+                    </Text>
+                    <Divider style={styles.divider}></Divider>
+                    <Text style={styles.text}>Price: </Text>
+                    <Text style={[styles.text, { color: ThemeColors.Blue }]}>
+                        {officeData.Price} PLN
+                    </Text>
+                    <Divider style={styles.divider}></Divider>
+
+                </View>
+            </ConfirmBox>
+            <ConfirmBox
+                visible={parkBoxVisible}
+                title={
+                    <>
+                        <Ionicons name="checkmark-circle-outline" size={24} />
+                        {"Booked Successfully"}
+                    </>
+                }
+                cancelHandler={() => setParkVisible(false)}
+                confirmHandler={confirmToParklyHandler}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: "column",
+                        // alignItems: "center",
+                        justifyContent: "space-between",
+                        marginVertical: 50,
+                    }}
+                >
+                    <Text style={styles.text}>
+                        Office booked successfully! You can now see your booking
+                        in your profile page.
+                    </Text>
+                    <Text
+                        style={[
+                            styles.text,
+                            { color: ThemeColors.Blue, fontWeight: "bold" },
+                        ]}
+                    >
+                        Do you want to book a parking slot near the office?
+                    </Text>
+                </View>
+            </ConfirmBox>
             <Card style={styles.card}>
                 <Card.Content>
                     <Image
@@ -62,7 +153,7 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                         style={{ marginTop: 10 }}
                         mode="elevated"
                         onPress={() => {
-                            setCBVisible(true);
+                            setConfirmVisible(true);
                         }}
                     >
                         Book
@@ -75,7 +166,7 @@ const OfficeDetailScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     card: {
         marginVertical: 4,
-        backgroundColor: ThemeColors.White,
+        backgroundColor: ThemeColors.PureWhite,
         overflow: "hidden",
     },
     title: {
@@ -102,6 +193,10 @@ const styles = StyleSheet.create({
 
         width: Dimensions.get("window").width,
         height: 200,
+    },
+    divider: {
+        height: 1,
+        color: ThemeColors.Black,
     },
 });
 export default OfficeDetailScreen;

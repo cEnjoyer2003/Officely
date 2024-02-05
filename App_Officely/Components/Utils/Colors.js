@@ -1,12 +1,12 @@
-
-
-export const ThemeColors = {    
-    Main : "#015D8D",
-    Side : "#59A2D0",
-    Background : '#CFC8B9',
-    Plain : "#A0B2D4",
-    White : "#FFFFFF",
-
-    Focus : "#DC996B",
-    Warning : "#A92803"
-}
+export const ThemeColors = {
+    Blue: "#015D8D",
+    LightBlue: "#59A2D0",
+    LightGray: "#CFC8B9",
+    BlueGray: "#A0B2D4",
+    White: "#EFEEEC",
+    PureWhite: "#FFFFFF",
+    LightOrange: "#E6BC7B",
+    Orange: "#DC996B",
+    Red: "#A92803",
+    Black: "#433D3B"
+};

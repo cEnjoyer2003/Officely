@@ -1,23 +1,36 @@
 import {
     SET_USER,
+    SET_SORT_BY_PRICE,
+    SET_MIN_PRICE,
+    SET_MAX_PRICE,
     SET_OFFICE_START_DATE,
     SET_OFFICE_END_DATE,
     SELECT_OFFICE_CITY,
     UPDATE_OFFICE_DATA,
     UPDATE_PARKING_DATA,
     UPDATE_BOOKING_DATA,
+    SET_MIN_RATING,
+    SET_WIFI_OPTION,
+    QUIT_USER,
 } from "./actions";
 
 const initialState = {
     UserInfo: {
+        Quited: true,
         Email: "boxuan.zhang.stud@pw.edu.pl",
         FirstName: "Boxuan",
         LastName: "Zhang",
+        Avatar: "pac-man",
     },
     OfficeSearchOptions: {
         StartDate: "",
         EndDate: "",
         City: "",
+        SortByPrice: null,
+        MinPrice: "0",
+        MaxPrice: "9999999",
+        MinRating: 0,
+        Wifi: false,
     },
     CityData: [{ Name: "Warszawa" }, { Name: "Krakow" }, { Name: "Gdansk" }],
     OfficeData: [
@@ -95,12 +108,24 @@ const rootReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_USER:
             return setUser(state, action.payload);
+        case QUIT_USER:
+            return quitUser(state);
         case SET_OFFICE_START_DATE:
             return setOfficeStartDate(state, action.payload);
         case SET_OFFICE_END_DATE:
             return setOfficeEndDate(state, action.payload);
         case SELECT_OFFICE_CITY:
             return selectOfficeCity(state, action.payload);
+        case SET_SORT_BY_PRICE:
+            return setSortByPrice(state, action.payload);
+        case SET_MIN_PRICE:
+            return setMinPrice(state, action.payload);
+        case SET_MAX_PRICE:
+            return setMaxPrice(state, action.payload);
+        case SET_MIN_RATING:
+            return setMinRating(state, action.payload);
+        case SET_WIFI_OPTION:
+            return setWifiOption(state, action.payload);
         case UPDATE_OFFICE_DATA:
             return updateOfficeData(state, action.payload);
         case UPDATE_PARKING_DATA:
@@ -114,14 +139,21 @@ const rootReducer = (state = initialState, action) => {
 
 const setUser = (state, info) => {
     const UserInfo = {
-        Email : info.Email,
-        FirstName: info.FirstName,
-        LastName : info.LastName, 
+        ...state.UserInfo,
+        Quited: false,
+        // Email: info.Email,
+        // FirstName: info.FirstName,
+        // LastName: info.LastName,
     };
     return {
         ...state,
         UserInfo,
     };
+};
+
+const quitUser = (state) => {
+    console.log(initialState);
+    return initialState;
 };
 
 const setOfficeStartDate = (state, date) => {
@@ -145,6 +177,74 @@ const setOfficeEndDate = (state, date) => {
 
 const selectOfficeCity = (state, city) => {
     const OfficeSearchOptions = { ...state.OfficeSearchOptions, City: city };
+
+    return {
+        ...state,
+        OfficeSearchOptions,
+    };
+};
+
+const setSortByPrice = (state, sorting) => {
+    const OfficeSearchOptions = {
+        ...state.OfficeSearchOptions,
+        SortByPrice: sorting,
+    };
+
+    return {
+        ...state,
+        OfficeSearchOptions,
+    };
+};
+
+const setMinPrice = (state, price) => {
+    try {
+        const OfficeSearchOptions = {
+            ...state.OfficeSearchOptions,
+            MinPrice: parseInt(price),
+        };
+        return {
+            ...state,
+            OfficeSearchOptions,
+        };
+    } catch (error) {
+        console.error(error);
+    }
+    return state;
+};
+
+const setMaxPrice = (state, price) => {
+    try {
+        const OfficeSearchOptions = {
+            ...state.OfficeSearchOptions,
+            MaxPrice: parseInt(price),
+        };
+
+        return {
+            ...state,
+            OfficeSearchOptions,
+        };
+    } catch (error) {
+        console.error(error);
+    }
+    return state;
+};
+
+const setMinRating = (state, rating) => {
+    const OfficeSearchOptions = {
+        ...state.OfficeSearchOptions,
+        MinRating: rating,
+    };
+    return {
+        ...state,
+        OfficeSearchOptions,
+    };
+};
+
+const setWifiOption = (state, wifi) => {
+    const OfficeSearchOptions = {
+        ...state.OfficeSearchOptions,
+        Wifi: wifi,
+    };
 
     return {
         ...state,

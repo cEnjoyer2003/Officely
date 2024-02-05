@@ -6,8 +6,10 @@ import RNPickerSelect from "react-native-picker-select";
 import { Card, Button } from "react-native-paper";
 
 import OfficeCalendar from "./OfficeCalendar";
+import HeaderBar from "../Utils/HeaderBar";
 import { selectOfficeCity } from "../../redux/actions";
 import { fetchAvaliableCities, searchOffice } from "../../redux/thunk";
+import OfficeFilter from "../Utils/OfficeFilter";
 
 const OfficeSearchScreen = ({ navigation }) => {
     // const [selectedValue, setSelectedValue] = useState(null);
@@ -21,6 +23,7 @@ const OfficeSearchScreen = ({ navigation }) => {
 
     const dispatch = useDispatch();
     const [options, setOptions] = useState([]);
+    const [filterVisible, setFilterVisible] = useState(false);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
@@ -33,7 +36,6 @@ const OfficeSearchScreen = ({ navigation }) => {
                     value: item.Name,
                 }))
             );
-            console.log(cityData);
         });
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return unsubscribe;
@@ -42,11 +44,17 @@ const OfficeSearchScreen = ({ navigation }) => {
     const placeholder = {
         label: "Select a city...",
         value: "",
-        color: ThemeColors.Main,
+        color: ThemeColors.Blue,
     };
-    
+
     return (
-        <View>
+        <View style={styles.background}>
+            <HeaderBar title="Officely Search" />
+
+            <OfficeFilter
+                visible={filterVisible}
+                dismissHandler={() => setFilterVisible(false)}
+            ></OfficeFilter>
             <Card style={styles.container}>
                 <Card.Content>
                     <OfficeCalendar />
@@ -59,13 +67,23 @@ const OfficeSearchScreen = ({ navigation }) => {
                         value={city}
                         style={{
                             placeholder: {
-                                color: ThemeColors.Main,
+                                color: ThemeColors.Blue,
                                 fontSize: 14,
                                 fontWeight: "bold",
                             },
                         }}
                     />
                     <Button
+                        style={styles.button}
+                        mode="elevated"
+                        onPress={() => {
+                            setFilterVisible(true);
+                        }}
+                    >
+                        Options
+                    </Button>
+                    <Button
+                        style={styles.button}
                         mode="elevated"
                         onPress={() => {
                             dispatch(searchOffice());
@@ -84,8 +102,12 @@ const OfficeSearchScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+        backgroundColor: ThemeColors.White
+    },
     container: {
-        backgroundColor: ThemeColors.White,
+        backgroundColor: ThemeColors.PureWhite,
         marginTop: 10,
         marginLeft: 5,
         marginRight: 5,
@@ -94,6 +116,10 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 16,
         color: "black",
+    },
+    button: {
+        // backgroundColor: ThemeColors.Ivory,
+        marginVertical: 10,
     },
 });
 

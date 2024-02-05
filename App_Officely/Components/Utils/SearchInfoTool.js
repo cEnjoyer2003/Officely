@@ -10,8 +10,10 @@ import { SegmentedButtons, Button, TextInput } from "react-native-paper";
 import { ThemeColors } from "./Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-const SearchInfoTool = () => {
-    const startDate = useSelector((state) => state.OfficeSearchOptions.StartDate);
+const SearchInfoTool = ({filterHandler}) => {
+    const startDate = useSelector(
+        (state) => state.OfficeSearchOptions.StartDate
+    );
     const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
     const city = useSelector((state) => state.OfficeSearchOptions.City);
 
@@ -24,40 +26,16 @@ const SearchInfoTool = () => {
                 <Text style={styles.smallLabel}>{startDate}</Text>
                 <Text style={styles.smallLabel}>{endDate}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.itemRight}>
-                    <Text style={{...styles.label, marginRight: 20}}>
-                        <Ionicons
-                            name="filter"
-                            size={18}
-                            color={ThemeColors.Main}
-                        />
-                        filters
-                    </Text>
+            <TouchableOpacity style={styles.itemRight} onPress={filterHandler}>
+                <Text style={{ ...styles.label, marginRight: 20 }}>
+                    <Ionicons
+                        name="filter"
+                        size={18}
+                        color={ThemeColors.Main}
+                    />
+                    filters
+                </Text>
             </TouchableOpacity>
-            {/* <SegmentedButtons
-                style={styles.infoTool}
-                onValueChange={() => null}
-                buttons={[
-                    {
-                        value: "city",
-                        label: city,
-                        onPress: () => null,
-                        // disabled: true,
-                    },
-                    {
-                        value: "startDate",
-                        label: startDate ,
-                        onPress: () => null,
-                        // disabled: true,
-                    },
-                    {
-                        value: "endDate",
-                        label: endDate,
-                        onPress: () => null,
-                        // disabled: true,
-                    },
-                ]}
-            ></SegmentedButtons>  */}
         </View>
     );
 };
@@ -72,30 +50,31 @@ const styles = StyleSheet.create({
         marginLeft: 3,
         marginRight: 3,
         marginBottom: 4,
-        shadowOffset: 5,
     },
     itemLeft: {
         // marginVertical: 4,
         // marginHorizontal: 8,
         // flex: 0.3,
         width: (Dimensions.get("window").width - 6) / 3,
-        backgroundColor: "#ffffff",
-        borderColor: ThemeColors.Main,
+        backgroundColor: ThemeColors.PureWhite,
+        borderColor: ThemeColors.Black,
         borderWidth: 1,
         borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
     },
     itemMiddle: {
         width: (Dimensions.get("window").width - 6) / 3,
-        backgroundColor: "#ffffff",
-        borderColor: ThemeColors.Main,
+        backgroundColor: ThemeColors.PureWhite,
+        borderColor: ThemeColors.Black,
         borderWidth: 1,
+        marginHorizontal: -1,
     },
     itemRight: {
         width: (Dimensions.get("window").width - 6) / 3,
-        backgroundColor: "#ffffff",
-        borderColor: ThemeColors.Main,
+        backgroundColor: ThemeColors.PureWhite,
+        borderColor: ThemeColors.Black,
         borderWidth: 1,
+
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
     },
