@@ -1,12 +1,17 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { Button, TextInput, Divider } from "react-native-paper";
 
 import { ThemeColors } from "../Utils/Colors";
+import { resetPasswordWithToken } from "../../redux/thunk";
 
 const ResetPasswordScreen = ({ navigation }) => {
-    const [email, setEmail] = useState("");
+    const token = useSelector((state) => state.UserInfo.Token);
+    const emailStored = useSelector((state) => state.UserInfo.Email);
+    const [email, setEmail] = useState(
+        emailStored || emailStored !== "" ? emailStored : ""
+    );
     const [oldPW, setOld] = useState("");
     const [newPW, setNew] = useState("");
     const [confirmedPW, setConfirmed] = useState("");
@@ -15,6 +20,15 @@ const ResetPasswordScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const reset = () => {
+        if (token === "" || token === null) {
+        } else {
+            dispatch(
+                resetPasswordWithToken({
+                    newPassword: newPW,
+                    oldPassword: oldPW,
+                })
+            );
+        }
         // dispatch();
         navigation.popToTop();
     };

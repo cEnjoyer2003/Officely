@@ -1,3 +1,4 @@
+export const SET_TOKEN = "SET_TOKEN";
 export const SET_USER = "SET_USER";
 export const QUIT_USER = "QUIT_USER";
 
@@ -7,13 +8,20 @@ export const SELECT_OFFICE_CITY = "SELECT_OFFICE_CITY";
 export const SET_SORT_BY_PRICE = "SET_SORT_BY_PRICE";
 export const SET_MIN_PRICE = "SET_MIN_PRICE";
 export const SET_MAX_PRICE = "SET_MAX_PRICE";
+export const SET_MIN_CAPACITY = "SET_MIN_CAPACITY";
+export const SET_MAX_CAPACITY = "SET_MAX_CAPACITY";
 export const SET_MIN_RATING = "SET_MIN_RATING";
 export const SET_WIFI_OPTION = "SET_WIFI_OPTION";
 
-
+export const UPDATE_AVALIABLE_CITIES = "UPDATE_AVALIABLE_CITIES";
 export const UPDATE_OFFICE_DATA = "UPDATE_OFFICE_DATA";
 export const UPDATE_PARKING_DATA = "UPDATE_PARKING_DATA";
 export const UPDATE_BOOKING_DATA = "UPDATE_BOOKING_DATA";
+
+export const setToken = (token) => ({
+    type: SET_TOKEN,
+    payload: token,
+});
 
 export const setUser = (info) => ({
     type: SET_USER,
@@ -55,6 +63,16 @@ export const setMaxPrice = (price) => ({
     payload: price,
 });
 
+export const setMinCapacity = (capacity) => ({
+    type: SET_MIN_CAPACITY,
+    payload: capacity,
+});
+
+export const setMaxCapacity = (capacity) => ({
+    type: SET_MAX_CAPACITY,
+    payload: capacity,
+});
+
 export const setMinRating = (rating) => ({
     type: SET_MIN_RATING,
     payload: rating,
@@ -65,8 +83,13 @@ export const setWifiOption = (wifi) => ({
     payload: wifi,
 });
 
+export const updateAvailableCities = (cities) => ({
+    type: UPDATE_AVALIABLE_CITIES,
+    payload: cities,
+});
+
 export const updateOfficeData = (officeData) => ({
-    type: SELECT_OFFICE_CITY,
+    type: UPDATE_OFFICE_DATA,
     payload: officeData,
 });
 

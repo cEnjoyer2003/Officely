@@ -12,10 +12,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const SearchInfoTool = ({filterHandler}) => {
     const startDate = useSelector(
-        (state) => state.OfficeSearchOptions.StartDate
+        (state) => state.OfficeSearchOptions.startDate
     );
-    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
-    const city = useSelector((state) => state.OfficeSearchOptions.City);
+    const endDate = useSelector((state) => state.OfficeSearchOptions.endDate);
+    const city = useSelector((state) => state.OfficeSearchOptions.city);
 
     return (
         <View style={styles.container}>

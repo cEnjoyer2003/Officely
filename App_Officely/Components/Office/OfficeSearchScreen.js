@@ -15,11 +15,11 @@ const OfficeSearchScreen = ({ navigation }) => {
     // const [selectedValue, setSelectedValue] = useState(null);
 
     const cityData = useSelector((state) => state.CityData);
-    const city = useSelector((state) => state.OfficeSearchOptions.City);
+    const city = useSelector((state) => state.OfficeSearchOptions.city);
     const startDate = useSelector(
-        (state) => state.OfficeSearchOptions.StartDate
+        (state) => state.OfficeSearchOptions.startDate
     );
-    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
+    const endDate = useSelector((state) => state.OfficeSearchOptions.endDate);
 
     const dispatch = useDispatch();
     const [options, setOptions] = useState([]);
@@ -30,16 +30,19 @@ const OfficeSearchScreen = ({ navigation }) => {
             // The screen is focused
             // Call any action
             dispatch(fetchAvaliableCities());
-            setOptions(
-                cityData.map((item) => ({
-                    label: item.Name,
-                    value: item.Name,
-                }))
-            );
         });
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return unsubscribe;
     }, [navigation]);
+
+    useEffect(() => {
+        setOptions(
+            cityData.map((item) => ({
+                label: item.Name,
+                value: item.Name,
+            }))
+        );
+    }, [cityData]);
 
     const placeholder = {
         label: "Select a city...",
@@ -104,7 +107,7 @@ const OfficeSearchScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        backgroundColor: ThemeColors.White
+        backgroundColor: ThemeColors.White,
     },
     container: {
         backgroundColor: ThemeColors.PureWhite,

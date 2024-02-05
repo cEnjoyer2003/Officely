@@ -20,32 +20,61 @@ import {
     setMinRating,
     setSortByPrice,
     setWifiOption,
+    setMinCapacity,
+    setMaxCapacity,
 } from "../../redux/actions";
 import { Input } from "@rneui/base";
 import { useEffect, useState } from "react";
 
 const OfficeFilter = ({ visible, dismissHandler }) => {
     const sorting = useSelector(
-        (state) => state.OfficeSearchOptions.SortByPrice
+        (state) => state.OfficeSearchOptions.sortByPrice
     );
-    const minPrice = useSelector((state) => state.OfficeSearchOptions.MinPrice);
-    const maxPrice = useSelector((state) => state.OfficeSearchOptions.MaxPrice);
-    const rating = useSelector((state) => state.OfficeSearchOptions.MinRating);
-    const wifi = useSelector((state) => state.OfficeSearchOptions.Wifi);
-    useEffect(() => setLocalRating(rating), []);
+    const minPrice = useSelector(
+        (state) => state.OfficeSearchOptions.minimumPrice
+    );
+    const maxPrice = useSelector(
+        (state) => state.OfficeSearchOptions.maximumPrice
+    );
+    const rating = useSelector(
+        (state) => state.OfficeSearchOptions.minimumRating
+    );
+    const wifi = useSelector((state) => state.OfficeSearchOptions.wifi);
+
+    const minCapacity = useSelector(
+        (state) => state.OfficeSearchOptions.minimumCapacity
+    );
+    const maxCapacity = useSelector(
+        (state) => state.OfficeSearchOptions.maximumCapacity
+    );
+
+    useEffect(() => setLocalRating(rating), [rating]);
 
     const dispatch = useDispatch();
 
-    const [avaiablePriceRange, setAvaiablity] = useState(true);
+    const [avaiablePriceRange, setPriceAvaiablity] = useState(true);
+    const [avaiableCapacityRange, setCapacityAvaiablity] = useState(true);
+
     const [localRating, setLocalRating] = useState(rating);
+
     const checkMinMaxPrice = () =>
-        setAvaiablity(
+        setPriceAvaiablity(
             minPrice <= maxPrice || isNaN(minPrice) || isNaN(maxPrice)
+        );
+    const checkMinMaxCapacity = () =>
+        setCapacityAvaiablity(
+            minCapacity <= maxCapacity ||
+                isNaN(minCapacity) ||
+                isNaN(maxCapacity)
         );
 
     useEffect(() => {
         checkMinMaxPrice();
     }, [minPrice, maxPrice]);
+
+    useEffect(() => {
+        checkMinMaxCapacity();
+    }, [minCapacity, maxCapacity]);
 
     return (
         <Portal>
@@ -84,8 +113,11 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                                 },
                             ]}
                         />
-                        <Text style={styles.subtitle}>Price Range</Text>
+                        <Divider style={styles.divider}></Divider>
 
+                        <Text style={styles.subtitle}>
+                            Price Range (PLN/Day)
+                        </Text>
                         <View style={styles.inline}>
                             <TextInput
                                 style={styles.input}
@@ -127,7 +159,63 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                                 Unavaiable price range.
                             </Text>
                         )}
-                        <Text style={styles.subtitle}>Minimum Rating : </Text>
+                        <Divider style={styles.divider}></Divider>
+
+                        <Text style={styles.subtitle}>
+                            Capacity Range (Person)
+                        </Text>
+                        <View style={styles.inline}>
+                            <TextInput
+                                style={styles.input}
+                                outlineColor={ThemeColors.Orange}
+                                keyboardType="numeric"
+                                mode="outlined"
+                                label="min"
+                                value={
+                                    isNaN(minCapacity)
+                                        ? ""
+                                        : String(minCapacity)
+                                }
+                                onChangeText={(value) => {
+                                    dispatch(
+                                        setMinCapacity(
+                                            value.replace(/[^0-9]/g, "")
+                                        )
+                                    );
+                                }}
+                            ></TextInput>
+                            <Text style={styles.subtitle}>~</Text>
+                            <TextInput
+                                style={styles.input}
+                                keyboardType="numeric"
+                                outlineColor={ThemeColors.Orange}
+                                mode="outlined"
+                                label="max"
+                                value={
+                                    isNaN(maxCapacity)
+                                        ? ""
+                                        : String(maxCapacity)
+                                }
+                                onChangeText={(value) => {
+                                    dispatch(
+                                        setMaxCapacity(
+                                            value.replace(/[^0-9]/g, "")
+                                        )
+                                    );
+                                }}
+                            ></TextInput>
+                        </View>
+                        {avaiableCapacityRange ? (
+                            <View></View>
+                        ) : (
+                            <Text style={{ color: ThemeColors.Red }}>
+                                <Ionicons name="close-circle" />
+                                Unavaiable capacity range.
+                            </Text>
+                        )}
+                        <Divider style={styles.divider}></Divider>
+
+                        <Text style={styles.subtitle}>Minimum Rating</Text>
                         <View style={styles.inline}>
                             <Slider
                                 style={{ width: 200, height: 40 }}
@@ -135,7 +223,9 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                                     setLocalRating(value);
                                 }}
                                 onSlidingComplete={(value) =>
-                                    dispatch(setMinRating(value))
+                                    dispatch(
+                                        setMinRating(Number(value.toFixed(1)))
+                                    )
                                 }
                                 value={rating}
                                 minimumValue={0}
@@ -149,6 +239,8 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                                 {localRating.toFixed(1)}
                             </Text>
                         </View>
+                        <Divider style={styles.divider}></Divider>
+
                         <Text style={styles.subtitle}>Facility</Text>
                         <IconButton
                             icon="wifi"
@@ -174,15 +266,15 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         // backgroundColor: ThemeColors.PureWhite,
         // padding: 20,
-        height: 500,
+        height: 600,
 
         // : "center",
     },
     components: {
         flex: 1,
         flexDirection: "column",
-        alignItems: "baseline",
-        justifyContent: "space-between",
+        // alignItems: "baseline",
+        // justifyContent: "space-between",
         marginHorizontal: 20,
         marginTop: 150,
         height: 500,
@@ -197,6 +289,11 @@ const styles = StyleSheet.create({
     },
     buttons: {
         marginVertical: 10,
+    },
+    divider: {
+        height: 1.5,
+        backgroundColor: ThemeColors.BlueGray,
+        marginVertical: 3,
     },
     inline: {
         flexDirection: "row",

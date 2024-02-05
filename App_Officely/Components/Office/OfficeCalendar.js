@@ -7,8 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setOfficeStartDate, setOfficeEndDate } from "../../redux/actions";
 
 const OfficeCalendar = () => {
-    const startDate = useSelector((state) => state.OfficeSearchOptions.StartDate);
-    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
+    const startDate = useSelector((state) => state.OfficeSearchOptions.startDate);
+    const endDate = useSelector((state) => state.OfficeSearchOptions.endDate);
     const dispatch = useDispatch();
 
     const [selectedRange, useSelectedRange] = useState({});

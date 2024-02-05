@@ -1,4 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Button } from "react-native-paper";
 // import { Header as HeaderRNE, HeaderProps, Icon, Avatar } from "@rneui/themed";
@@ -6,9 +8,21 @@ import { Appbar, useTheme, Avatar } from "react-native-paper";
 
 import { ThemeColors } from "../Utils/Colors";
 import HeaderBar from "../Utils/HeaderBar";
-import { useSelector } from "react-redux";
+import { fetchUserInfo } from "../../redux/thunk";
 
-const ProfileHomeScreen = () => {
+const ProfileHomeScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            // The screen is focused
+            // Call any action
+            dispatch(fetchUserInfo());
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [navigation]);
+
     const firstName = useSelector((state) => state.UserInfo.FirstName);
     const lastName = useSelector((state) => state.UserInfo.LastName);
     const email = useSelector((state) => state.UserInfo.Email);
@@ -24,7 +38,12 @@ const ProfileHomeScreen = () => {
                             {firstName} {lastName}
                         </Text>
                         <Text style={styles.subtitle}>{email}</Text>
-                        <Button mode="elevated" onPress={()=>{}}>
+                        <Button
+                            mode="elevated"
+                            onPress={() => {
+                                navigation.push("ResetPasswordInapp", {});
+                            }}
+                        >
                             change password
                         </Button>
                     </View>
@@ -50,12 +69,12 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 30,
-        color: ThemeColors.Black
+        color: ThemeColors.Black,
     },
-    subtitle:{
+    subtitle: {
         fontSize: 16,
         marginVertical: 10,
-        color: ThemeColors.Black
+        color: ThemeColors.Black,
     },
     bottom: {
         position: "absolute",
