@@ -1,6 +1,8 @@
 package com.example.backend_officiely.service;
 
 import com.example.backend_officiely.dtos.OfficeDto;
+import com.example.backend_officiely.dtos.OfficeResponse;
+import com.example.backend_officiely.dtos.SearchParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,11 +11,15 @@ import java.util.List;
 
 public interface OfficeService {
 
-    List<OfficeDto> getAllOffices();
+    List<OfficeResponse> getAllOffices();
 
-    OfficeDto addOffice(OfficeDto officeDto);
+    OfficeResponse addOffice(OfficeDto officeDto);
 
-    void deleteOffice(String id);
+    Long deleteOffice(String id);
 
-    OfficeDto getOfficeById(String id);
+    OfficeResponse getOfficeById(String id);
+
+    List<OfficeResponse> searchOfficeByParams(SearchParams searchParams);
+
+    OfficeResponse updateOffice(OfficeDto officeDto, String officeId);
 }

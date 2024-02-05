@@ -4,10 +4,10 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.net.URL;
-
-@Builder
 @Data
-public class OfficeDto {
+@Builder
+public class OfficeResponse {
+    private String officeId;
     private String officeName;
     private String officeAddress;
     private String facilities;

@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public enum Role {
@@ -25,9 +26,10 @@ public enum Role {
     private final Set<Permission> permissions;
 
     public List<SimpleGrantedAuthority> getGrantedAuthorities() {
-        var authorities = getPermissions().stream()
+        var authorities = getPermissions()
+                .stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.name()))
-                .toList();
+                .collect(Collectors.toList());
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return authorities;
     }

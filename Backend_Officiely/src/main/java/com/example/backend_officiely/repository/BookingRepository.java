@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking, Long>{
+public interface BookingRepository extends JpaRepository<Booking, String>{
+
+    List<Booking> findByOffice_OfficeId(String OfficeId);
 
 
+    List<Booking> findByUser_UserId(String UserId);
 
+    Booking findByBookingId(String bookingId);
 
-
-
-
+    long deleteByBookingId(String bookingId);
 }

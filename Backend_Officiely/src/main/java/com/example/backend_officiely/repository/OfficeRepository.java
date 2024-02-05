@@ -9,4 +9,13 @@ import java.util.List;
 @Repository
 public interface OfficeRepository extends JpaRepository<Office, String> {
 
+
+
+
+    Office findByOfficeId(String OfficeId);
+
+    List<Office> findByPriceGreaterThanEqualAndPriceLessThanEqualAndCapacityLessThanEqualAndCapacityGreaterThanEqual(double minimumPrice, double maximumPrice, double maximumCapacity, double minimumCapacity);
+
+    long deleteByOfficeId(String officeId);
+
 }
