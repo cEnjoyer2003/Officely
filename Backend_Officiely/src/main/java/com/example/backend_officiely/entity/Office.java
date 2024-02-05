@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,23 +18,23 @@ import lombok.NoArgsConstructor;
 @Table(
         name = "office",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "office_id")
+                @UniqueConstraint(columnNames = "Office_id")
         }
 )
 public class Office {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String office_id;
+    private String officeId;
     @Column(
             name = "office_name",
             nullable = false
     )
-    private String office_name;
+    private String officeName;
     @Column(
             name = "office_address",
             nullable = false
     )
-    private String office_address;
+    private String officeAddress;
     @Column(
             name = "facilities"
     )
@@ -39,12 +43,7 @@ public class Office {
             name = "contact_info",
             nullable = false
     )
-    private String contact_info;
-    @Column(
-            name = "rating",
-            nullable = false
-    )
-    private double rating;
+    private String contactInfo;
     @Column(
             name = "price",
             nullable = false
@@ -60,7 +59,15 @@ public class Office {
             nullable = false
     )
     private String city;
-
-
+    @Column(
+            name="capacity",
+            nullable = false
+    )
+    private double capacity;
+    @Column(
+            name = "office_image",
+            nullable = false
+    )
+    private URL officeImage;
 
 }

@@ -2,13 +2,14 @@ package com.example.backend_officiely.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Builder
 @Entity
 @Table(
         name = "booking",
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String booking_id;
+    private String bookingId;
 
     @ManyToOne
     @JoinColumn(name = "office_id", nullable = false)
@@ -33,12 +34,12 @@ public class Booking {
             name="StartDateTime",
             nullable = false
     )
-    private String StartDateTime;
+    private String startDateTime;
 
     @Column(
             name="EndDateTime",
             nullable = false
     )
-    private String EndDateTime;
+    private String endDateTime;
 
 }
