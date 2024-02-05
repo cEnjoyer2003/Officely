@@ -1,45 +1,71 @@
 import { View, Text, StyleSheet } from "react-native";
 
 import { Button } from "react-native-paper";
-import { Header as HeaderRNE, HeaderProps, Icon, Avatar } from "@rneui/themed";
+// import { Header as HeaderRNE, HeaderProps, Icon, Avatar } from "@rneui/themed";
+import { Appbar, useTheme, Avatar } from "react-native-paper";
 
 import { ThemeColors } from "../Utils/Colors";
 import HeaderBar from "../Utils/HeaderBar";
+import { useSelector } from "react-redux";
 
 const ProfileHomeScreen = () => {
+    const firstName = useSelector((state) => state.UserInfo.FirstName);
+    const lastName = useSelector((state) => state.UserInfo.LastName);
+    const email = useSelector((state) => state.UserInfo.Email);
+    const avatar = useSelector((state) => state.UserInfo.Avatar);
+
     return (
         <View>
-            {/* <HeaderRNE
-                backgroundColor={ThemeColors.LightBlue}
-                leftComponent={
-                    <View style={styles.container}>
-                        <Avatar
-                            size={80}
-                            rounded
-                            source={require("../../assets/pikachu.jpg")}
-                        />
-                        <View>
-                            <Text style={styles.text}>boxuan@gmail.com</Text>
-                            <Button mode="elevated" onPress={() => {}}>
-                                change password
-                            </Button>
-                        </View>
+            <Appbar.Header style={styles.header}>
+                <View style={styles.components}>
+                    <Avatar.Icon size={100} icon={avatar} />
+                    <View style={styles.rightComponents}>
+                        <Text style={styles.title}>
+                            {firstName} {lastName}
+                        </Text>
+                        <Text style={styles.subtitle}>{email}</Text>
+                        <Button mode="elevated" onPress={()=>{}}>
+                            change password
+                        </Button>
                     </View>
-                }
-                centerComponent={<View></View>}
-            ></HeaderRNE> */}
-            <></>
+                </View>
+            </Appbar.Header>
         </View>
     );
 };
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: "row",
-        width: 500,
+    header: {
+        backgroundColor: ThemeColors.LightOrange,
+        height: 200,
     },
-    text: {
-        color: ThemeColors.White,
+    components: {
+        marginLeft: 20,
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    rightComponents: {
+        marginLeft: 20,
+        marginRight: 20,
+        flexDirection: "column",
+    },
+    title: {
+        fontSize: 30,
+        color: ThemeColors.Black
+    },
+    subtitle:{
         fontSize: 16,
+        marginVertical: 10,
+        color: ThemeColors.Black
+    },
+    bottom: {
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
+    fab: {
+        position: "absolute",
+        right: 16,
     },
 });
 

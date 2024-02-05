@@ -1,4 +1,5 @@
 export const SET_USER = "SET_USER";
+export const QUIT_USER = "QUIT_USER";
 
 export const SET_OFFICE_START_DATE = "SET_OFFICE_START_DATE";
 export const SET_OFFICE_END_DATE = "SET_OFFICE_END_DATE";
@@ -17,6 +18,11 @@ export const UPDATE_BOOKING_DATA = "UPDATE_BOOKING_DATA";
 export const setUser = (info) => ({
     type: SET_USER,
     payload: info,
+});
+
+export const quitUser = () => ({
+    type: QUIT_USER,
+    // payload: null,
 });
 
 export const setOfficeStartDate = (date) => ({

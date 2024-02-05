@@ -62,7 +62,6 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                             value={sorting}
                             onValueChange={(value) => {
                                 dispatch(setSortByPrice(value));
-                                // console.log(sorting);
                             }}
                             backgroundColor={ThemeColors.Orange}
                             buttons={[
@@ -208,7 +207,7 @@ const styles = StyleSheet.create({
     input: {
         height: 30,
         marginHorizontal: 10,
-        backgroundColor: ThemeColors.PureWhite,
+        backgroundColor: ThemeColors.White,
     },
 });
 export default OfficeFilter;

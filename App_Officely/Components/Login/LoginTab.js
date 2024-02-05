@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { StyleSheet, View, Text } from "react-native";
+import { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SigninScreen from "./SigninScreen";
 import SignupScreen from "./SignupScreen";
@@ -8,7 +6,21 @@ import ResetPasswordScreen from "./ResetPasswordScreen";
 
 const Stack = createNativeStackNavigator();
 
-const LoginTab = () => {
+const LoginTab = ({ navigation }) => {
+    // useEffect(() => {
+    //     navigation.setOptions({
+    //         tabBarStyle: {
+    //             display: "none",
+    //         },
+    //     });
+    //     return () => {
+    //         navigation.setOptions({
+    //             tabBarStyle: {
+    //                 display: "flex",
+    //             },
+    //         });
+    //     };
+    // }, []);
     return (
         <Stack.Navigator
             initialRouteName="Signin"

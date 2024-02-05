@@ -11,6 +11,14 @@ const BASE_URL = "http://localhost:3001";
 //     // TODO
 // };
 
+// export const quitAcc = () => async (dispatch, getState) => {
+//     try {
+
+//     }
+
+// }
+
+
 export const fetchAvaliableCities = () => async (dispatch, getState) => {
     // try {
     //     const response = await fetch(`${BASE_URL}/Office/search`, {
@@ -24,7 +32,6 @@ export const fetchAvaliableCities = () => async (dispatch, getState) => {
     //         }
     //     )
     //     // dispatch(toggleLiked(productId));
-    //     // console.log(response);
     //     // dispatch(setListLiked(response));
     // } catch (e) {
     //     // console.error(e.message);

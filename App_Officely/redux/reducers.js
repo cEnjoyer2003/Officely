@@ -11,13 +11,16 @@ import {
     UPDATE_BOOKING_DATA,
     SET_MIN_RATING,
     SET_WIFI_OPTION,
+    QUIT_USER,
 } from "./actions";
 
 const initialState = {
     UserInfo: {
+        Quited: true,
         Email: "boxuan.zhang.stud@pw.edu.pl",
         FirstName: "Boxuan",
         LastName: "Zhang",
+        Avatar: "pac-man",
     },
     OfficeSearchOptions: {
         StartDate: "",
@@ -105,6 +108,8 @@ const rootReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_USER:
             return setUser(state, action.payload);
+        case QUIT_USER:
+            return quitUser(state);
         case SET_OFFICE_START_DATE:
             return setOfficeStartDate(state, action.payload);
         case SET_OFFICE_END_DATE:
@@ -134,14 +139,21 @@ const rootReducer = (state = initialState, action) => {
 
 const setUser = (state, info) => {
     const UserInfo = {
-        Email: info.Email,
-        FirstName: info.FirstName,
-        LastName: info.LastName,
+        ...state.UserInfo,
+        Quited: false,
+        // Email: info.Email,
+        // FirstName: info.FirstName,
+        // LastName: info.LastName,
     };
     return {
         ...state,
         UserInfo,
     };
+};
+
+const quitUser = (state) => {
+    console.log(initialState);
+    return initialState;
 };
 
 const setOfficeStartDate = (state, date) => {
@@ -206,7 +218,7 @@ const setMaxPrice = (state, price) => {
             ...state.OfficeSearchOptions,
             MaxPrice: parseInt(price),
         };
-        
+
         return {
             ...state,
             OfficeSearchOptions,

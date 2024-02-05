@@ -1,7 +1,7 @@
 // import { Header as HeaderRNE, HeaderProps, Icon, Avatar } from "@rneui/themed";
 import { StyleSheet, View } from "react-native";
 
-import { Appbar, FAB, useTheme } from "react-native-paper";
+import { Appbar, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeColors } from "./Colors";
 

@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { StyleSheet, View, Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import ProfileHomeScreen from "./ProfileHomeScreen";

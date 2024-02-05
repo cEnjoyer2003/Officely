@@ -7,8 +7,7 @@ import SearchInfoTool from "../Utils/SearchInfoTool";
 import OfficeCard from "./OfficeCard";
 import { ThemeColors } from "../Utils/Colors";
 import OfficeFilter from "../Utils/OfficeFilter";
-
-const officeData = [];
+import { searchOffice } from "../../redux/thunk";
 
 const OfficeResultScreen = ({ navigation }) => {
     const officeData = useSelector((state) => state.OfficeData);
