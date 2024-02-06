@@ -8,6 +8,7 @@ import {
     updateAvailableCities,
     updateBookingData,
     updateOfficeData,
+    updateRatingData,
 } from "./actions";
 
 const MAX_INT = 1000000;
@@ -31,7 +32,7 @@ export const login = (options) => async (dispatch, getState) => {
             else throw resp.json();
         });
         dispatch(setToken(response.token));
-        console.log(response.token);
+        // console.log(response.token);
     } catch (e) {
         console.error(String(e));
     }
@@ -144,8 +145,8 @@ export const searchOffice = () => async (dispatch, getState) => {
             ? `${BASE_URL}/office`
             : `${BASE_URL}/office/search`;
 
-        console.log(`Fetching from: ${destination}`);
-        console.log(options);
+        // console.log(`Fetching from: ${destination}`);
+        // console.log(options);
 
         const response = await fetch(destination, {
             method: "POST",
@@ -158,7 +159,7 @@ export const searchOffice = () => async (dispatch, getState) => {
             if (resp.ok) return resp.json();
             else throw resp.json();
         });
-        console.log(response);
+        // console.log(response);
         dispatch(updateOfficeData(response));
     } catch (e) {
         console.error(e);
@@ -193,7 +194,7 @@ export const bookOffice = (options) => async (dispatch, getState) => {
             if (resp.ok) return resp.json();
             else throw resp.json();
         });
-        console.log(response);
+        // console.log(response);
         dispatch(updateOfficeData(response));
     } catch (e) {
         console.error(e);
@@ -232,7 +233,7 @@ export const cancelBooking = (bookingId) => async (dispatch, getState) => {
                 Authorization: `Bearer ${getState().UserInfo.Token}`,
             },
         }).then((resp) => {
-            if (resp.ok) return resp.json();
+            if (resp.ok) return;
             else throw resp;
         });
 
@@ -240,5 +241,51 @@ export const cancelBooking = (bookingId) => async (dispatch, getState) => {
         // dispatch(updateBookingData(response));
     } catch (e) {
         console.error(e.message);
+    }
+};
+
+export const fetchRating = (officeId) => async (dispatch, getState) => {
+    try {
+        const destination = `${BASE_URL}/rating/${officeId}`
+        const response = await fetch(destination, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${getState().UserInfo.Token}`,
+            },
+        }).then((resp) => {
+            if (resp.ok) return resp.json();
+            else throw resp;
+        });
+        // console.log(response);
+        // console.log(getState().RatingData)
+        // const cities = [...new Set(response.map((item) => item.city))];
+        dispatch(updateRatingData(officeId, response));
+    } catch (e) {
+        console.error(e.message);
+    }
+};
+
+export const updateRating = (officeId, rating, comment) => async (dispatch, getState) => {
+    try {
+        const destination = `${BASE_URL}/rating/${officeId}`
+        const body = {
+            ratingValue: Number(rating),
+            comment: comment,
+        }
+        // console.log(body);
+        // console.log(destination)
+        const response = await fetch(destination, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${getState().UserInfo.Token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        }).then((resp) => {
+            if (resp.ok) return;
+            else throw resp;
+        });
+    } catch (e) {
+        console.error(e);
     }
 };

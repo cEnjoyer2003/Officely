@@ -1,14 +1,23 @@
-import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    Dimensions,
+    Image,
+    FlatList,
+} from "react-native";
 import { Card, Button, Divider } from "react-native-paper";
 import { ThemeColors } from "../Utils/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ConfirmBox from "../Utils/ConfirmBox";
 import HeaderBar from "../Utils/HeaderBar";
 import { DatetimeToDate } from "../Utils/utils";
-import { cancelBooking } from "../../redux/thunk";
+import { cancelBooking, updateRating } from "../../redux/thunk";
+import RatingCard from "../Rating/RatingCard";
+import RatingInput from "../Rating/RatingInput";
 
 const BookingDetailScreen = ({ route, navigation }) => {
     const [confirmBoxVisible, setConfirmVisible] = useState(false);
@@ -16,17 +25,27 @@ const BookingDetailScreen = ({ route, navigation }) => {
     const bookingData = route.params.data;
     const startDate = DatetimeToDate(bookingData.startDateTime);
     const endDate = DatetimeToDate(bookingData.endDateTime);
-
+    const [cost, setCost] = useState(
+        calculateCost(startDate, endDate, bookingData.office.price)
+    );
     const cancelBookingHandler = () => {
         setConfirmVisible(false);
         dispatch(cancelBooking(bookingData.bookingId));
     };
+    useEffect(
+        () =>
+            setCost(
+                calculateCost(startDate, endDate, bookingData.office.price)
+            ),
+        []
+    );
     return (
         <View style={styles.container}>
             <HeaderBar
                 title={"Office"}
                 back={() => navigation.pop()}
             ></HeaderBar>
+
             <ConfirmBox
                 visible={confirmBoxVisible}
                 title="Cancel Booking..."
@@ -37,7 +56,7 @@ const BookingDetailScreen = ({ route, navigation }) => {
                 <View
                     style={{
                         marginVertical: 20,
-                        marginHorizontal: 30
+                        marginHorizontal: 30,
                     }}
                 >
                     <Text style={styles.text}>Date:</Text>
@@ -45,10 +64,10 @@ const BookingDetailScreen = ({ route, navigation }) => {
                         {startDate} - {endDate}
                     </Text>
                     <Divider style={styles.divider}></Divider>
-                    <Text style={styles.text}>
-                        City:
+                    <Text style={styles.text}>City:</Text>
+                    <Text style={{ color: ThemeColors.Blue }}>
+                        {bookingData.office.city}
                     </Text>
-                    <Text style={{ color: ThemeColors.Blue }}>{bookingData.office.city}</Text>
                     <Divider style={styles.divider}></Divider>
                     <Text style={styles.text}>Office Address: </Text>
                     <Text style={[styles.text, { color: ThemeColors.Blue }]}>
@@ -57,58 +76,81 @@ const BookingDetailScreen = ({ route, navigation }) => {
                     <Divider style={styles.divider}></Divider>
                     <Text style={styles.text}>Price: </Text>
                     <Text style={[styles.text, { color: ThemeColors.Blue }]}>
-                        {bookingData.office.price} PLN
+                        {cost} PLN
                     </Text>
                     <Divider style={styles.divider}></Divider>
                 </View>
             </ConfirmBox>
             <View style={styles.card}>
-                {/* <Card style={styles.card}>
-                <Card.Content> */}
                 <Image
                     style={styles.img}
-                    source={{ uri: bookingData.office.PictureUri }}
+                    source={{ uri: bookingData.office.image }}
                 />
-                <Text style={styles.title}>
-                    {bookingData.office.officeName}
-                </Text>
+                {/* <Card style={styles.card}>
+                <Card.Content> */}
                 <View
                     style={{
-                        flexDirection: "row",
-                        // flex: 1,
-                        justifyContent: "space-between",
+                        marginHorizontal: 10,
+                        marginTop: 5,
+                        flex: 1,
+                        flexDirection: "column",
                     }}
                 >
-                    <View>
-                        <Text style={styles.text}>
-                            <Ionicons name="location" style={styles.icon} />
-                            {bookingData.office.officeAddress}
-                        </Text>
-                        <Text style={styles.text}>
-                            <Ionicons name="mail" style={styles.icon} />
-                            {bookingData.office.contactInfo}
-                        </Text>
-                        <Text style={styles.text}>
-                            <Ionicons name="wifi" style={styles.icon} />
-                            {bookingData.office.wifi ? "Wi-Fi" : "No Wi-fi"}
-                        </Text>
-                        <Text style={[styles.text]}>
-                            <Ionicons style={styles.icon} name="business" />
-                            {bookingData.office.facilities}
-                        </Text>
-                        <Text style={styles.text}>
-                            <Ionicons style={styles.icon} name="people" />
-                            {bookingData.office.capacity}
-                        </Text>
+                    <Text style={styles.title}>
+                        {bookingData.office.officeName}
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            // flex: 1,
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <View>
+                            <Text style={styles.text}>
+                                <Ionicons
+                                    name="navigate-circle"
+                                    style={styles.icon}
+                                />
+                                {bookingData.office.city}
+                            </Text>
+                            <Text style={styles.text}>
+                                <Ionicons name="location" style={styles.icon} />
+                                {bookingData.office.officeAddress}
+                            </Text>
+                            <Text style={styles.text}>
+                                <Ionicons name="mail" style={styles.icon} />
+                                {bookingData.office.contactInfo}
+                            </Text>
+                            <Text style={styles.text}>
+                                <Ionicons name="wifi" style={styles.icon} />
+                                {bookingData.office.wifi ? "Wi-Fi" : "No Wi-fi"}
+                            </Text>
+                            <Text style={[styles.text]}>
+                                <Ionicons style={styles.icon} name="business" />
+                                {bookingData.office.facilities}
+                            </Text>
+                            <Text style={styles.text}>
+                                <Ionicons style={styles.icon} name="people" />
+                                {bookingData.office.capacity}
+                            </Text>
+                        </View>
                     </View>
                 </View>
-                <></>
-                <View style={styles.bottom}>
-                    <Text style={styles.subtitle}>
-                        {bookingData.office.price.toFixed(2)} PLN
-                    </Text>
+                <RatingInput
+                    officeId={bookingData.office.officeId}
+                ></RatingInput>
+                <View style={[styles.bottom]}>
+                    <View>
+                        <Text style={[styles.subtitle, { fontSize: 18 }]}>
+                            {startDate} ~ {endDate}
+                        </Text>
+                        <Text style={styles.subtitle}>
+                            {cost.toFixed(2)} PLN
+                        </Text>
+                    </View>
                     <Button
-                        style={{ marginTop: 10 }}
+                        style={{ width: 120 }}
                         mode="elevated"
                         onPress={() => {
                             setConfirmVisible(true);
@@ -132,13 +174,16 @@ const styles = StyleSheet.create({
     card: {
         flex: 1,
         flexDirection: "column",
-        marginHorizontal: 15,
+        // marginHorizontal: 15,
         marginVertical: 0,
         overflow: "hidden",
     },
     bottom: {
-        flexDirection: "column",
         alignItems: "flex-end",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 10,
+        marginHorizontal: 10,
     },
     title: {
         fontSize: 22,
@@ -160,9 +205,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     img: {
-        marginRight: -18,
-        marginLeft: -18,
-        marginTop: -20,
         width: Dimensions.get("window").width,
         height: 200,
     },

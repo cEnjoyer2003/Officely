@@ -46,7 +46,7 @@ const OfficeSearchScreen = ({ navigation }) => {
 
     const placeholder = {
         label: "Select a city...",
-        value: "",
+        value: null,
         color: ThemeColors.Blue,
     };
 

@@ -31,7 +31,7 @@ const initialState = {
     OfficeSearchOptions: {
         startDate: "",
         endDate: "",
-        city: "",
+        city: null,
         minimumPrice: null,
         maximumPrice: null,
         sortByPrice: null,
@@ -44,6 +44,11 @@ const initialState = {
     OfficeData: [],
     ParkingData: [],
     BookingData: [],
+    RatingData: {
+        officeId: "",
+        averageRating: 0,
+        ratings: [],
+    },
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -83,7 +88,7 @@ const rootReducer = (state = initialState, action) => {
         case UPDATE_BOOKING_DATA:
             return updateBookingData(state, action.payload);
         case UPDATE_RATING_DATA:
-            return ;
+            return updateRatingData(state, action.payload.officeId, action.payload.ratingData);
         default:
             return state;
     }
@@ -276,12 +281,16 @@ const updateBookingData = (state, bookingData) => {
     };
 };
 
-const updateRatingData = (state, officeId, bookingData) => {
+const updateRatingData = (state, officeId, ratingData) => {
+    const averageRating = ratingData.length
+        ? ratingData.reduce((prev, item) => prev + item.ratingValue, 0)
+        : 0;
     return {
         ...state,
         RatingData: {
             officeId: officeId,
-            bookingData: bookingData,
+            averageRating: averageRating,
+            ratings: ratingData,
         },
     };
 };
