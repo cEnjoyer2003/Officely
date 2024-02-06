@@ -32,6 +32,7 @@ const BookingDetailScreen = ({ route, navigation }) => {
     const cancelBookingHandler = () => {
         setConfirmVisible(false);
         dispatch(cancelBooking(bookingData.bookingId));
+        navigation.pop();
     };
     useEffect(
         () =>

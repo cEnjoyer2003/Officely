@@ -1,6 +1,7 @@
 import {
     SET_TOKEN,
     SET_USER,
+    SET_CARLY,
     SET_SORT_BY_PRICE,
     SET_MIN_PRICE,
     SET_MAX_PRICE,
@@ -8,7 +9,8 @@ import {
     SET_OFFICE_END_DATE,
     SELECT_OFFICE_CITY,
     UPDATE_OFFICE_DATA,
-    UPDATE_PARKING_DATA,
+    UPDATE_CARLY_DATA,
+    UPDATE_CARLY_BOOKING,
     UPDATE_BOOKING_DATA,
     SET_MIN_RATING,
     SET_WIFI_OPTION,
@@ -24,11 +26,11 @@ const initialState = {
         error: false,
         message: null,
     },
-    CarlyInfo:{
-        Token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YngiLCJpYXQiOjE3MDcyMjgxNjEsImV4cCI6MTcwNzgzMjk2MX0.MIDYpFjhXv92lWMT-ruZkNb90FmaKVqnXKy1Wyi-u5E",
-        Username: "zbx",
-        Password: "111",
+    CarlyInfo: {
+        Token: "",
+        Id: 0,
     },
+    CarlyBooking: [],
     UserInfo: {
         Quited: true,
         Token: "",
@@ -51,7 +53,7 @@ const initialState = {
     },
     CityData: [],
     OfficeData: [],
-    ParkingData: [],
+    CarlyData: [],
     BookingData: [],
     RatingData: {
         officeId: "",
@@ -66,6 +68,8 @@ const rootReducer = (state = initialState, action) => {
             return setToken(state, action.payload);
         case SET_USER:
             return setUser(state, action.payload);
+        case SET_CARLY:
+            return setCarlyUser(state, action.payload);
         case QUIT_USER:
             return quitUser(state);
         case SET_OFFICE_START_DATE:
@@ -92,12 +96,18 @@ const rootReducer = (state = initialState, action) => {
             return updateAvailableCities(state, action.payload);
         case UPDATE_OFFICE_DATA:
             return updateOfficeData(state, action.payload);
-        case UPDATE_PARKING_DATA:
-            return updateParkingData(state, action.payload);
+        case UPDATE_CARLY_DATA:
+            return updateCarlyData(state, action.payload);
         case UPDATE_BOOKING_DATA:
             return updateBookingData(state, action.payload);
         case UPDATE_RATING_DATA:
-            return updateRatingData(state, action.payload.officeId, action.payload.ratingData);
+            return updateRatingData(
+                state,
+                action.payload.officeId,
+                action.payload.ratingData
+            );
+        case UPDATE_CARLY_BOOKING:
+            return updateCarlyBooking(state, action.payload);
         default:
             return state;
     }
@@ -130,6 +140,12 @@ const setUser = (state, info) => {
     };
 };
 
+const setCarlyUser = (state, info) => {
+    return {
+        ...state,
+        CarlyInfo: info
+    }
+}
 const quitUser = (state) => {
     return initialState;
 };
@@ -276,10 +292,17 @@ const updateOfficeData = (state, officeData) => {
     };
 };
 
-const updateParkingData = (state, parkingData) => {
+const updateCarlyData = (state, CarlyData) => {
     return {
         ...state,
-        ParkingData: parkingData,
+        CarlyData: CarlyData,
+    };
+};
+const updateCarlyBooking = (state, data) => {
+    console.log([...state.CarlyBooking, data]);
+    return {
+        ...state,
+        CarlyBooking: [...state.CarlyBooking, data],
     };
 };
 
