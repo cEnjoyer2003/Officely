@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { Button, TextInput, Divider } from "react-native-paper";
 
 import { ThemeColors } from "../Utils/Colors";
+import { register } from "../../redux/thunk";
 
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
@@ -16,7 +17,14 @@ const SignupScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const signup = () => {
-        // dispatch();
+        dispatch(
+            register({
+                firstName,
+                lastName,
+                password: passwd,
+                email,
+            })
+        );
         navigation.popToTop();
     };
 

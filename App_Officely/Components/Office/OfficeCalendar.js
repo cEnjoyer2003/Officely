@@ -7,12 +7,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { setOfficeStartDate, setOfficeEndDate } from "../../redux/actions";
 
 const OfficeCalendar = () => {
-    const startDate = useSelector((state) => state.OfficeSearchOptions.StartDate);
-    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
+    const startDate = useSelector((state) => state.OfficeSearchOptions.startDate);
+    const endDate = useSelector((state) => state.OfficeSearchOptions.endDate);
     const dispatch = useDispatch();
 
     const [selectedRange, useSelectedRange] = useState({});
     const setDates = (start, end) => {
+        if (start==="" || end ===""){
+            useSelectedRange({})
+            return;
+        }
         var selected = {};
         for (
             var m = moment(start);
@@ -29,9 +33,10 @@ const OfficeCalendar = () => {
             };
         }
         useSelectedRange(selected);
+        return;
     };
 
-    useEffect(() => setDates(startDate, endDate), []);
+    useEffect(() => setDates(startDate, endDate), [startDate, endDate]);
 
     return (
         <View>
@@ -45,12 +50,12 @@ const OfficeCalendar = () => {
                             dispatch(setOfficeStartDate(day.dateString));
                         } else {
                             dispatch(setOfficeEndDate(day.dateString));
-                            setDates(startDate, day.dateString);
+                            // setDates(startDate, day.dateString);
                         }
                     } else {
                         dispatch(setOfficeStartDate(day.dateString));
                         dispatch(setOfficeEndDate(""));
-                        useSelectedRange({});
+                        // useSelectedRange({});
                     }
                 }}
                 markingType={"period"}
