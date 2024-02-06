@@ -6,17 +6,27 @@ import {
     Dimensions,
     Image,
 } from "react-native";
+import { useState, useEffect } from "react";
 import { Card, Divider } from "react-native-paper";
 import { ThemeColors } from "../Utils/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-import { DatetimeToDate } from "../Utils/utils";
+import { DatetimeToDate, calculateCost } from "../Utils/utils";
 
 const BookingCard = ({ data: bookingData, navigation }) => {
 
     const startDate = DatetimeToDate(bookingData.startDateTime);
     const endDate = DatetimeToDate(bookingData.endDateTime);
-
+    const [cost, setCost] = useState(
+        calculateCost(startDate, endDate, bookingData.office.price)
+    );
+    useEffect(
+        () =>
+            setCost(
+                calculateCost(startDate, endDate, bookingData.office.price)
+            ),
+        []
+    );
     return (
         <TouchableOpacity
         onPress={() => navigation.push("BookingDetail", { data: bookingData })}
@@ -65,7 +75,7 @@ const BookingCard = ({ data: bookingData, navigation }) => {
                             {endDate}
                         </Text>
                         <Text style={[styles.subtitle]}>
-                            {bookingData.office.price.toFixed(2)} PLN
+                           $ {cost.toFixed(2)}
                         </Text>
                     {/* </View> */}
                 </Card.Content>

@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { Button, TextInput, Divider } from "react-native-paper";
 
 import { ThemeColors } from "../Utils/Colors";
-import { resetPasswordWithToken } from "../../redux/thunk";
+import { resetPasswordWithEmail, resetPasswordWithToken } from "../../redux/thunk";
 
 const ResetPasswordScreen = ({ navigation }) => {
     const token = useSelector((state) => state.UserInfo.Token);
@@ -21,6 +21,11 @@ const ResetPasswordScreen = ({ navigation }) => {
 
     const reset = () => {
         if (token === "" || token === null) {
+            dispatch(resetPasswordWithEmail({
+                newPassword: newPW,
+                oldPassword: oldPW,
+                email: email
+            }))
         } else {
             dispatch(
                 resetPasswordWithToken({

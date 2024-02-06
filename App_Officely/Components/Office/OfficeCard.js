@@ -58,7 +58,7 @@ const OfficeCard = ({ data: officeData, navigation }) => {
                             </Text>
                         </View>
                         <Text style={[styles.subtitle]}>
-                            {officeData.price.toFixed(0)} PLN
+                           $ {officeData.price.toFixed(0)}
                         </Text>
                     </View>
                 </Card.Content>

@@ -18,6 +18,7 @@ import { DatetimeToDate } from "../Utils/utils";
 import { cancelBooking, updateRating } from "../../redux/thunk";
 import RatingCard from "../Rating/RatingCard";
 import RatingInput from "../Rating/RatingInput";
+import { calculateCost } from "../Utils/utils";
 
 const BookingDetailScreen = ({ route, navigation }) => {
     const [confirmBoxVisible, setConfirmVisible] = useState(false);
@@ -50,7 +51,7 @@ const BookingDetailScreen = ({ route, navigation }) => {
                 visible={confirmBoxVisible}
                 title="Cancel Booking..."
                 cancelHandler={() => setConfirmVisible(false)}
-                cancelLabel="back"
+                cancelLabel="Back"
                 confirmHandler={cancelBookingHandler}
             >
                 <View
@@ -76,7 +77,7 @@ const BookingDetailScreen = ({ route, navigation }) => {
                     <Divider style={styles.divider}></Divider>
                     <Text style={styles.text}>Price: </Text>
                     <Text style={[styles.text, { color: ThemeColors.Blue }]}>
-                        {cost} PLN
+                       $ {cost}
                     </Text>
                     <Divider style={styles.divider}></Divider>
                 </View>
@@ -134,6 +135,10 @@ const BookingDetailScreen = ({ route, navigation }) => {
                                 <Ionicons style={styles.icon} name="people" />
                                 {bookingData.office.capacity}
                             </Text>
+                            <Text style={[styles.text]}>
+                                <Ionicons style={styles.icon} name="card" />
+                                $ {bookingData.office.price} / day
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -146,7 +151,7 @@ const BookingDetailScreen = ({ route, navigation }) => {
                             {startDate} ~ {endDate}
                         </Text>
                         <Text style={styles.subtitle}>
-                            {cost.toFixed(2)} PLN
+                           $ {cost.toFixed(2)}
                         </Text>
                     </View>
                     <Button

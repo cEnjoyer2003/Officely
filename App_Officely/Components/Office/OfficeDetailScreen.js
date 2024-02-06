@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import HeaderBar from "../Utils/HeaderBar";
 import { bookOffice, fetchRating } from "../../redux/thunk";
 import RatingCard from "../Rating/RatingCard";
-import { calculateFee as calculateCost } from "../Utils/utils";
+import { calculateCost } from "../Utils/utils";
 
 const OfficeDetailScreen = ({ route, navigation }) => {
     const startDate = useSelector(
@@ -97,7 +97,7 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                     <Divider style={styles.divider}></Divider>
                     <Text style={styles.text}>Cost: </Text>
                     <Text style={[styles.text, { color: ThemeColors.Blue }]}>
-                        {cost} PLN
+                      $ {cost} 
                     </Text>
                     <Divider style={styles.divider}></Divider>
                 </View>
@@ -194,10 +194,15 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                                 <Ionicons style={styles.icon} name="people" />
                                 {officeData.capacity}
                             </Text>
+                            <Text style={[styles.text]}>
+                                <Ionicons style={styles.icon} name="card" />
+                                $ {officeData.price} / day
+                            </Text>
                         </View>
                     </View>
-                    {/* <View> */}
-                    <Text style={[styles.subtitle, { textAlign: "left" }]}>
+                    {/* <View> officeData.price*/}
+                    <Divider></Divider>
+                    <Text style={[styles.subtitle, { fontSize: 22, textAlign: "left" }]}>
                         Reviews:
                     </Text>
                     <FlatList
@@ -217,7 +222,7 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                             {startDate} ~ {endDate}
                         </Text>
                         <Text style={styles.subtitle}>
-                            {cost.toFixed(2)} PLN
+                           $ {cost.toFixed(2)}
                         </Text>
                     </View>
                     <Button

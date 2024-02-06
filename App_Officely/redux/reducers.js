@@ -20,9 +20,18 @@ import {
 } from "./actions";
 
 const initialState = {
+    ErrorInfo: {
+        error: false,
+        message: null,
+    },
+    CarlyInfo:{
+        Token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YngiLCJpYXQiOjE3MDcyMjgxNjEsImV4cCI6MTcwNzgzMjk2MX0.MIDYpFjhXv92lWMT-ruZkNb90FmaKVqnXKy1Wyi-u5E",
+        Username: "zbx",
+        Password: "111",
+    },
     UserInfo: {
-        Quited: false,
-        Token: "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6IkFETUlOX1JFQUQsQURNSU5fVVBEQVRFLEFETUlOX0RFTEVURSxBRE1JTl9DUkVBVEUsUk9MRV9BRE1JTiIsInN1YiI6ImJveHVhbi56aGFuZy5zdHVkQHB3LmVkdS5wbCIsImlhdCI6MTcwNzIxMjc2MCwiZXhwIjoxNzA3Mjk5MTYwfQ.mM5YcQNxJmwgIWFe-QdqY7bKfdGVuQaHO1if7fu4K0pwQKvyXHNfFVVXlbCwbxiZ",
+        Quited: true,
+        Token: "",
         Email: "",
         FirstName: "",
         LastName: "",

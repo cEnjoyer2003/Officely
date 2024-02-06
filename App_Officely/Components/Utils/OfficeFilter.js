@@ -132,7 +132,7 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                         <Divider style={styles.divider}></Divider>
 
                         <Text style={styles.subtitle}>
-                            Price Range (PLN/Day)
+                            Price Range ($/Day)
                         </Text>
                         <View style={styles.inline}>
                             <TextInput

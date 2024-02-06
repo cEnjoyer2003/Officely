@@ -18,6 +18,8 @@ const BASE_URL = MOCK
     ? "http://192.168.1.186:3001"
     : "https://officelyapp.azurewebsites.net/api";
 
+const CARLY_URL = "https://pw-react-carly.azurewebsites.net/cars";
+
 export const login = (options) => async (dispatch, getState) => {
     try {
         const destination = `${BASE_URL}/auth/authenticate`;
@@ -29,12 +31,12 @@ export const login = (options) => async (dispatch, getState) => {
             body: JSON.stringify(options),
         }).then((resp) => {
             if (resp.ok) return resp.json();
-            else throw resp.json();
+            else throw "Wrong Password or Email.";
         });
         dispatch(setToken(response.token));
         // console.log(response.token);
     } catch (e) {
-        console.error(String(e));
+        console.error(e);
     }
 };
 
@@ -49,13 +51,52 @@ export const register = (options) => async (dispatch, getState) => {
             body: JSON.stringify(options),
         }).then((resp) => {
             if (resp.ok) return resp.json();
-            else throw resp;
+            else throw "Forbidden Registration.";
         });
         // console.log(response);
     } catch (e) {
         console.error(e);
     }
 };
+export const resetPasswordWithEmail =
+    (options) => async (dispatch, getState) => {
+        try {
+            const loginBody = {
+                email: options.email,
+                password: options.oldPassword,
+            }
+            const loginDest = `${BASE_URL}/auth/authenticate`;
+            const loginResponse = await fetch(loginDest, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(loginBody),
+            }).then((resp) => {
+                if (resp.ok) return resp.json();
+                else throw "Wrong Old Password";
+            });
+
+            const body = {
+                newPassword: options.newPassword,
+                oldPassword: options.oldPassword
+            };
+            const destination = `${BASE_URL}/auth/change-password`;
+            const response = await fetch(destination, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${loginResponse.Token}`,
+                },
+                body: JSON.stringify(body),
+            }).then((resp) => {
+                if (resp.ok) return resp;
+                else throw "Reset Password Failed";
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
 export const resetPasswordWithToken =
     (options) => async (dispatch, getState) => {
@@ -69,10 +110,9 @@ export const resetPasswordWithToken =
                 },
                 body: JSON.stringify(options),
             }).then((resp) => {
-                if (resp.ok) return resp.json();
-                else throw resp;
+                if (resp.ok) return resp;
+                else throw "Reset Password Failed";
             });
-            // console.log(response);
         } catch (e) {
             console.error(e);
         }
@@ -157,7 +197,7 @@ export const searchOffice = () => async (dispatch, getState) => {
             body: JSON.stringify(options),
         }).then((resp) => {
             if (resp.ok) return resp.json();
-            else throw resp.json();
+            else throw "fail to search office";
         });
         // console.log(response);
         dispatch(updateOfficeData(response));
@@ -176,6 +216,7 @@ export const bookOffice = (options) => async (dispatch, getState) => {
         // const options = formatSearchOptions(state.OfficeSearchOptions);
         const destination = `${BASE_URL}/booking/${options.officeId}`;
         const body = {
+            origin: "officely",
             officeId: options.officeId,
             startDateTime: `${options.startDate}T00:00:00`,
             endDateTime: `${options.endDate}T00:00:00`,
@@ -192,7 +233,7 @@ export const bookOffice = (options) => async (dispatch, getState) => {
             body: JSON.stringify(body),
         }).then((resp) => {
             if (resp.ok) return resp.json();
-            else throw resp.json();
+            else throw "Fail to book office";
         });
         // console.log(response);
         dispatch(updateOfficeData(response));
@@ -214,19 +255,19 @@ export const fetchMyBookings = (options) => async (dispatch, getState) => {
             },
         }).then((resp) => {
             if (resp.ok) return resp.json();
-            else throw resp;
+            else throw "Failed to fetch bookings";
         });
 
         // const cities = [...new Set(response.map((item) => item.city))];
         dispatch(updateBookingData(response));
     } catch (e) {
-        console.error(e.message);
+        console.error(e);
     }
 };
 
 export const cancelBooking = (bookingId) => async (dispatch, getState) => {
     try {
-        const destination = `${BASE_URL}/booking/${bookingId}`
+        const destination = `${BASE_URL}/booking/${bookingId}`;
         const response = await fetch(destination, {
             method: "DELETE",
             headers: {
@@ -234,19 +275,19 @@ export const cancelBooking = (bookingId) => async (dispatch, getState) => {
             },
         }).then((resp) => {
             if (resp.ok) return;
-            else throw resp;
+            else throw "fail to cancel booking";
         });
 
         // const cities = [...new Set(response.map((item) => item.city))];
         // dispatch(updateBookingData(response));
     } catch (e) {
-        console.error(e.message);
+        console.error(e);
     }
 };
 
 export const fetchRating = (officeId) => async (dispatch, getState) => {
     try {
-        const destination = `${BASE_URL}/rating/${officeId}`
+        const destination = `${BASE_URL}/rating/${officeId}`;
         const response = await fetch(destination, {
             method: "GET",
             headers: {
@@ -265,27 +306,30 @@ export const fetchRating = (officeId) => async (dispatch, getState) => {
     }
 };
 
-export const updateRating = (officeId, rating, comment) => async (dispatch, getState) => {
-    try {
-        const destination = `${BASE_URL}/rating/${officeId}`
-        const body = {
-            ratingValue: Number(rating),
-            comment: comment,
+export const updateRating =
+    (officeId, rating, comment) => async (dispatch, getState) => {
+        try {
+            const destination = `${BASE_URL}/rating/${officeId}`;
+            const body = {
+                ratingValue: Number(rating),
+                comment: comment,
+            };
+            // console.log(body);
+            // console.log(destination)
+            const response = await fetch(destination, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${getState().UserInfo.Token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body),
+            }).then((resp) => {
+                if (resp.ok) return;
+                else throw resp;
+            });
+        } catch (e) {
+            console.error(e);
         }
-        // console.log(body);
-        // console.log(destination)
-        const response = await fetch(destination, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${getState().UserInfo.Token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        }).then((resp) => {
-            if (resp.ok) return;
-            else throw resp;
-        });
-    } catch (e) {
-        console.error(e);
-    }
-};
+    };
+
+
