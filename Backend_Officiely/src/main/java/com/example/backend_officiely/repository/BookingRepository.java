@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking, String>{
+public interface BookingRepository extends JpaRepository<Booking, String> {
 
     List<Booking> findByOffice_OfficeId(String OfficeId);
 
@@ -18,4 +18,7 @@ public interface BookingRepository extends JpaRepository<Booking, String>{
     Booking findByBookingId(String bookingId);
 
     long deleteByBookingId(String bookingId);
+
+    List<Booking> findByOffice_OfficeName(String officeName);
+
 }

@@ -1,41 +1,71 @@
-import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    Dimensions,
+    Image,
+    FlatList,
+} from "react-native";
 import { Card, Button, Divider } from "react-native-paper";
 import { ThemeColors } from "../Utils/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ConfirmBox from "../Utils/ConfirmBox";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HeaderBar from "../Utils/HeaderBar";
-import { bookOffice } from "../../redux/thunk";
+import { bookOffice, fetchRating } from "../../redux/thunk";
+import RatingCard from "../Rating/RatingCard";
+import { calculateCost } from "../Utils/utils";
 
 const OfficeDetailScreen = ({ route, navigation }) => {
     const startDate = useSelector(
-        (state) => state.OfficeSearchOptions.StartDate
+        (state) => state.OfficeSearchOptions.startDate
     );
-    const endDate = useSelector((state) => state.OfficeSearchOptions.EndDate);
-    const city = useSelector((state) => state.OfficeSearchOptions.City);
+    const endDate = useSelector((state) => state.OfficeSearchOptions.endDate);
+    const city = useSelector((state) => state.OfficeSearchOptions.city);
+    const ratings = useSelector((state) => state.RatingData.ratings);
+    const officeData = route.params.data;
 
+    const [cost, setCost] = useState(
+        calculateCost(startDate, endDate, officeData.price)
+    );
     const [confirmBoxVisible, setConfirmVisible] = useState(false);
     const [parkBoxVisible, setParkVisible] = useState(false);
 
     const dispatch = useDispatch();
-    const officeData = route.params.data;
 
     const confirmBookingHandler = () => {
-        dispatch(bookOffice());
+        dispatch(
+            bookOffice({
+                officeId: officeData.officeId,
+                startDate: startDate,
+                endDate: endDate,
+            })
+        );
         setConfirmVisible(false);
         setParkVisible(true);
     };
 
     const confirmToParklyHandler = () => {
-        // dispatch(bookOffice());
         setParkVisible(false);
         // setParkVisible(true);
         navigation.push("Parkly", {});
     };
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            // The screen is focused
+            // Call any action
+            dispatch(fetchRating(officeData.officeId));
+        });
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+    }, [navigation]);
+    useEffect(() => {
+        setCost(calculateCost(startDate, endDate, officeData.price));
+    }, []);
 
     return (
-        <View>
+        <View style={styles.container}>
             <HeaderBar
                 title={"Office"}
                 back={() => navigation.pop()}
@@ -48,11 +78,8 @@ const OfficeDetailScreen = ({ route, navigation }) => {
             >
                 <View
                     style={{
-                        flex: 1,
-                        flexDirection: "column",
-                        // alignItems: "center",
-                        justifyContent: "space-between",
-                        marginVertical: 10,
+                        marginTop: 40,
+                        marginHorizontal: 30,
                     }}
                 >
                     <Text style={styles.text}>Date:</Text>
@@ -60,22 +87,19 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                         {startDate} - {endDate}
                     </Text>
                     <Divider style={styles.divider}></Divider>
-                    <Text style={styles.text}>
-                        City:{" "}
-                        <Text style={{ color: ThemeColors.Blue }}>{city}</Text>
-                    </Text>
+                    <Text style={styles.text}>City:</Text>
+                    <Text style={{ color: ThemeColors.Blue }}>{city}</Text>
                     <Divider style={styles.divider}></Divider>
                     <Text style={styles.text}>Office Address: </Text>
                     <Text style={[styles.text, { color: ThemeColors.Blue }]}>
-                        {officeData.Address}
+                        {officeData.officeAddress}
                     </Text>
                     <Divider style={styles.divider}></Divider>
-                    <Text style={styles.text}>Price: </Text>
+                    <Text style={styles.text}>Cost: </Text>
                     <Text style={[styles.text, { color: ThemeColors.Blue }]}>
-                        {officeData.Price} PLN
+                      $ {cost} 
                     </Text>
                     <Divider style={styles.divider}></Divider>
-
                 </View>
             </ConfirmBox>
             <ConfirmBox
@@ -91,11 +115,12 @@ const OfficeDetailScreen = ({ route, navigation }) => {
             >
                 <View
                     style={{
-                        flex: 1,
-                        flexDirection: "column",
-                        // alignItems: "center",
-                        justifyContent: "space-between",
+                        // flex: 1,
+                        // flexDirection: "column",
+                        // // alignItems: "center",
+                        // justifyContent: "space-between",
                         marginVertical: 50,
+                        marginHorizontal: 30,
                     }}
                 >
                     <Text style={styles.text}>
@@ -112,13 +137,20 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                     </Text>
                 </View>
             </ConfirmBox>
-            <Card style={styles.card}>
-                <Card.Content>
-                    <Image
-                        style={styles.img}
-                        source={{ uri: officeData.PictureUri }}
-                    />
-                    <Text style={styles.title}>{officeData.Name}</Text>
+
+            <View style={styles.card}>
+                {/* <Card style={styles.card}>
+                <Card.Content> */}
+                <Image style={styles.img} source={{ uri: officeData.image }} />
+                <View
+                    style={{
+                        marginHorizontal: 10,
+                        marginTop: 5,
+                        flex: 1,
+                        flexDirection: "column",
+                    }}
+                >
+                    <Text style={styles.title}>{officeData.officeName}</Text>
                     <View
                         style={{
                             flexDirection: "row",
@@ -127,30 +159,74 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                         }}
                     >
                         <View>
-                            <Text>
-                                <Ionicons name="location" style={styles.icon} />
-                                {officeData.Address}
+                            <Text style={styles.text}>
+                                <Ionicons
+                                    name="navigate-circle"
+                                    style={styles.icon}
+                                />
+                                {city}
                             </Text>
-                            <Text>
+                            <Text style={styles.text}>
+                                <Ionicons name="location" style={styles.icon} />
+                                {officeData.officeAddress}
+                            </Text>
+                            {/* <Text>
                                 <Ionicons name="star" style={styles.icon} />
                                 {officeData.Rating}
-                            </Text>
-                            <Text>
-                                <Ionicons name="wifi" style={styles.icon} />
-                                {officeData.wifi ? "Wi-Fi" : x}
-                            </Text>
-                            <Text>
+                            </Text> */}
+
+                            <Text style={styles.text}>
                                 <Ionicons name="mail" style={styles.icon} />
-                                {officeData.Contact}
+                                {officeData.contactInfo}
+                            </Text>
+                            <Text style={styles.text}>
+                                <Ionicons
+                                    name={officeData.wifi ? "wifi" : "alert"}
+                                    style={styles.icon}
+                                />
+                                {officeData.wifi ? "Wi-Fi" : "No Wi-fi"}
+                            </Text>
+                            <Text style={[styles.text]}>
+                                <Ionicons style={styles.icon} name="business" />
+                                {officeData.facilities}
+                            </Text>
+                            <Text style={styles.text}>
+                                <Ionicons style={styles.icon} name="people" />
+                                {officeData.capacity}
+                            </Text>
+                            <Text style={[styles.text]}>
+                                <Ionicons style={styles.icon} name="card" />
+                                $ {officeData.price} / day
                             </Text>
                         </View>
-
+                    </View>
+                    {/* <View> officeData.price*/}
+                    <Divider></Divider>
+                    <Text style={[styles.subtitle, { fontSize: 22, textAlign: "left" }]}>
+                        Reviews:
+                    </Text>
+                    <FlatList
+                        data={ratings}
+                        renderItem={({ item }) => (
+                            <RatingCard
+                                data={item}
+                                // navigation={navigation}
+                            ></RatingCard>
+                        )}
+                    ></FlatList>
+                </View>
+                {/* </View> */}
+                <View style={[styles.bottom]}>
+                    <View>
+                        <Text style={[styles.subtitle, { fontSize: 18 }]}>
+                            {startDate} ~ {endDate}
+                        </Text>
                         <Text style={styles.subtitle}>
-                            PLN {officeData.Price}
+                           $ {cost.toFixed(2)}
                         </Text>
                     </View>
                     <Button
-                        style={{ marginTop: 10 }}
+                        style={{ width: 120 }}
                         mode="elevated"
                         onPress={() => {
                             setConfirmVisible(true);
@@ -158,16 +234,32 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                     >
                         Book
                     </Button>
-                </Card.Content>
-            </Card>
+                </View>
+                {/* </Card.Content> */}
+                {/* </Card> */}
+            </View>
         </View>
     );
 };
 const styles = StyleSheet.create({
-    card: {
-        marginVertical: 4,
+    container: {
+        flex: 1,
+        flexDirection: "column",
         backgroundColor: ThemeColors.PureWhite,
+    },
+    card: {
+        flex: 1,
+        flexDirection: "column",
+        // marginHorizontal: 15,
+        marginVertical: 0,
         overflow: "hidden",
+    },
+    bottom: {
+        flexDirection: "row",
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+        marginBottom: 10,
+        marginHorizontal: 10,
     },
     title: {
         fontSize: 22,
@@ -179,18 +271,20 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "right",
         textAlignVertical: "bottom",
+        color: ThemeColors.Blue,
     },
     text: {
-        fontSize: 20,
+        fontSize: 16,
     },
     icon: {
-        margin: 10,
+        color: ThemeColors.Blue,
+        fontSize: 16,
     },
-    img: {
-        marginRight: -18,
-        marginLeft: -18,
-        marginTop: -20,
 
+    img: {
+        // marginRight: -18,
+        // marginLeft: -18,
+        // marginTop: -20,
         width: Dimensions.get("window").width,
         height: 200,
     },

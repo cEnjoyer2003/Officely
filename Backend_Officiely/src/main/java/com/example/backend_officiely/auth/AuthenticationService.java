@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -22,14 +23,15 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
     public AuthenticationResponse register(RegisterDto registerDto) {
         var user = User.builder()
                 .firstName(registerDto.getFirstName())
-                    .lastName(registerDto.getLastName())
-                    .email(registerDto.getEmail())
-                    .password(passwordEncoder.encode(registerDto.getPassword()))
-                    .role(Role.ADMIN)
-                    .build();
+                .lastName(registerDto.getLastName())
+                .email(registerDto.getEmail())
+                .password(passwordEncoder.encode(registerDto.getPassword()))
+                .role(Role.USER)
+                .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()

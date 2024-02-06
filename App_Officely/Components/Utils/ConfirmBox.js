@@ -8,6 +8,8 @@ const ConfirmBox = ({
     visible,
     cancelHandler,
     confirmHandler,
+    cancelLabel,
+    confirmLabel,
 }) => {
     return (
         <Portal>
@@ -16,17 +18,29 @@ const ConfirmBox = ({
                 visible={visible}
                 onDismiss={cancelHandler}
             >
-                <Card style={styles.components}>
-                    <Card.Content>
-                        <Text style={styles.title}>{title}</Text>
-                        {children}
-                        <View style={styles.inline}>
-                            <Button mode="elevated" onPress={cancelHandler}>
-                                Cancel
-                            </Button>
-                            <Button mode="elevated" onPress={confirmHandler}>
-                                Confirm
-                            </Button>
+                <Card style={styles.card}>
+                    <Card.Content >
+                        <View style={styles.components}>
+                            <Text style={styles.title}>{title}</Text>
+                            {children}
+                        </View>
+                        <View style={styles.bottom}>
+                            <View style={styles.inline}>
+                                <Button
+                                    style={styles.button}
+                                    mode="elevated"
+                                    onPress={cancelHandler}
+                                >
+                                    {cancelLabel ? cancelLabel : "Cancel"}
+                                </Button>
+                                <Button
+                                    style={styles.button}
+                                    mode="elevated"
+                                    onPress={confirmHandler}
+                                >
+                                    {confirmLabel ? confirmLabel : "Confirm"}
+                                </Button>
+                            </View>
                         </View>
                     </Card.Content>
                 </Card>
@@ -37,28 +51,37 @@ const ConfirmBox = ({
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-between",
+        // justifyContent: "space-between",
+        marginTop: 150,
         // backgroundColor: ThemeColors.PureWhite,
         // padding: 20,
-        height: 500,
+        height: 380,
         // : "center",
+    },
+    card:{
+        backgroundColor: ThemeColors.PureWhite,
+        width: 350,
+        flexDirection: "column",
+        alignItems: "center",
     },
     components: {
         flex: 1,
-        flexDirection: "column",
-        alignItems: "center",
+        // flexDirection: "column",
+        // alignItems: "baseline",
+        alignSelf:"stretch",
         justifyContent: "space-between",
-        marginHorizontal: 20,
-        marginTop: 150,
-        height: 500,
-        width: 300,
+        width: 350,
         backgroundColor: ThemeColors.PureWhite,
-        // marginTop: 50,
-        // marginBottom: 50,
-        // marginHorizontal: 20,
+    },
+
+    bottom: {
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        marginHorizontal: 30,
     },
     title: {
         textAlign: "center",
@@ -66,10 +89,15 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     inline: {
+        height: 50,
         flexDirection: "row",
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "space-between",
+    },
+    button: {
+        flex: 1,
+        marginHorizontal: 5,
     },
 });
 

@@ -27,9 +27,10 @@ const ParklySearchScreen = ({ navigation }) => {
             >
                 <View
                     style={{
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        marginVertical: 100,
+                        // flexDirection: "column",
+                        // justifyContent: "space-between",
+                        marginTop: 100,
+                        marginHorizontal: 30,
                     }}
                 >
                     <Text
@@ -39,7 +40,7 @@ const ParklySearchScreen = ({ navigation }) => {
                             fontWeight: "bold",
                         }}
                     >
-                        Do you want to quit booking a parking slot?
+                        Do you want to stop booking a parking slot?
                     </Text>
                 </View>
             </ConfirmBox>

@@ -4,6 +4,7 @@ import { Button, Divider, TextInput } from "react-native-paper";
 import { ThemeColors } from "../Utils/Colors";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/actions";
+import { login } from "../../redux/thunk";
 
 const SigninScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
@@ -12,7 +13,12 @@ const SigninScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const signin = () => {
-        dispatch(setUser());
+        dispatch(
+            login({
+                email,
+                password: passwd,
+            })
+        );
     };
     // TODO check input
     return (

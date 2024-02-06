@@ -50,11 +50,8 @@ const AppNavigator = () => {
             >
                 <View
                     style={{
-                        flex: 1,
-                        flexDirection: "column",
-                        // alignItems: "center",
-                        justifyContent: "space-between",
-                        marginVertical: 100,
+                        alignItems: "center",
+                        marginHorizontal: 30,
                     }}
                 >
                     <Text style={{ color: ThemeColors.Blue, fontSize: 20 }}>

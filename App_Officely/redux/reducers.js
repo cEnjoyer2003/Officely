@@ -1,4 +1,5 @@
 import {
+    SET_TOKEN,
     SET_USER,
     SET_SORT_BY_PRICE,
     SET_MIN_PRICE,
@@ -12,100 +13,57 @@ import {
     SET_MIN_RATING,
     SET_WIFI_OPTION,
     QUIT_USER,
+    UPDATE_AVALIABLE_CITIES,
+    SET_MIN_CAPACITY,
+    SET_MAX_CAPACITY,
+    UPDATE_RATING_DATA,
 } from "./actions";
 
 const initialState = {
+    ErrorInfo: {
+        error: false,
+        message: null,
+    },
+    CarlyInfo:{
+        Token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YngiLCJpYXQiOjE3MDcyMjgxNjEsImV4cCI6MTcwNzgzMjk2MX0.MIDYpFjhXv92lWMT-ruZkNb90FmaKVqnXKy1Wyi-u5E",
+        Username: "zbx",
+        Password: "111",
+    },
     UserInfo: {
         Quited: true,
-        Email: "boxuan.zhang.stud@pw.edu.pl",
-        FirstName: "Boxuan",
-        LastName: "Zhang",
+        Token: "",
+        Email: "",
+        FirstName: "",
+        LastName: "",
         Avatar: "pac-man",
     },
     OfficeSearchOptions: {
-        StartDate: "",
-        EndDate: "",
-        City: "",
-        SortByPrice: null,
-        MinPrice: "0",
-        MaxPrice: "9999999",
-        MinRating: 0,
-        Wifi: false,
+        startDate: "",
+        endDate: "",
+        city: null,
+        minimumPrice: null,
+        maximumPrice: null,
+        sortByPrice: null,
+        minimumRating: 0,
+        wifi: null,
+        minimumCapacity: null,
+        maximumCapacity: null,
     },
-    CityData: [{ Name: "Warszawa" }, { Name: "Krakow" }, { Name: "Gdansk" }],
-    OfficeData: [
-        {
-            office_id: "123e4567-e89b-12d3-a456-426614174001",
-            Name: "TechHub Workspace",
-            Address: "123 Main Street",
-            facilities: "Meeting rooms, coworking spaces",
-            Contact: "contact@techhub.com",
-            Rating: 4.5,
-            Price: 150.0,
-            wifi: true,
-            City: "San Francisco",
-            PictureUri:
-                "https://plus.unsplash.com/premium_photo-1661775434014-9c0e8d71de03?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        },
-        {
-            office_id: "456e7890-12ab-34cd-56ef-789012345678",
-            Name: "Innovate Office Suites",
-            Address: "456 Oak Avenue",
-            facilities: "Private offices, event spaces",
-            Contact: "info@innovateoffices.com",
-            Rating: 4.2,
-            Price: 200.0,
-            wifi: true,
-            City: "New York",
-            PictureUri:
-                "https://plus.unsplash.com/premium_photo-1661775434014-9c0e8d71de03?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        },
-        {
-            office_id: "456e7890-12ab-34cd-56ef-789012345678",
-            Name: "Innovate Office Suites",
-            Address: "456 Oak Avenue",
-            facilities: "Private offices, event spaces",
-            Contact: "info@innovateoffices.com",
-            Rating: 4.2,
-            Price: 200.0,
-            wifi: true,
-            City: "New York",
-            PictureUri:
-                "https://plus.unsplash.com/premium_photo-1661775434014-9c0e8d71de03?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        },
-        {
-            office_id: "456e7890-12ab-34cd-56ef-789012345678",
-            Name: "Innovate Office Suites",
-            Address: "456 Oak Avenue",
-            facilities: "Private offices, event spaces",
-            Contact: "info@innovateoffices.com",
-            Rating: 4.2,
-            Price: 200.0,
-            wifi: true,
-            City: "New York",
-            PictureUri:
-                "https://plus.unsplash.com/premium_photo-1661775434014-9c0e8d71de03?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        },
-        {
-            office_id: "456e7890-12ab-34cd-56ef-789012345678",
-            Name: "Innovate Office Suites",
-            Address: "456 Oak Avenue",
-            facilities: "Private offices, event spaces",
-            Contact: "info@innovateoffices.com",
-            Rating: 4.2,
-            Price: 200.0,
-            wifi: true,
-            City: "New York",
-            PictureUri:
-                "https://plus.unsplash.com/premium_photo-1661775434014-9c0e8d71de03?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        },
-    ],
+    CityData: [],
+    OfficeData: [],
     ParkingData: [],
     BookingData: [],
+    RatingData: {
+        officeId: "",
+        averageRating: 0,
+        ratings: [],
+    },
 };
 
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_TOKEN:
+            return setToken(state, action.payload);
         case SET_USER:
             return setUser(state, action.payload);
         case QUIT_USER:
@@ -122,28 +80,49 @@ const rootReducer = (state = initialState, action) => {
             return setMinPrice(state, action.payload);
         case SET_MAX_PRICE:
             return setMaxPrice(state, action.payload);
+        case SET_MIN_CAPACITY:
+            return setMinCapacity(state, action.payload);
+        case SET_MAX_CAPACITY:
+            return setMaxCapacity(state, action.payload);
         case SET_MIN_RATING:
             return setMinRating(state, action.payload);
         case SET_WIFI_OPTION:
             return setWifiOption(state, action.payload);
+        case UPDATE_AVALIABLE_CITIES:
+            return updateAvailableCities(state, action.payload);
         case UPDATE_OFFICE_DATA:
             return updateOfficeData(state, action.payload);
         case UPDATE_PARKING_DATA:
             return updateParkingData(state, action.payload);
         case UPDATE_BOOKING_DATA:
             return updateBookingData(state, action.payload);
+        case UPDATE_RATING_DATA:
+            return updateRatingData(state, action.payload.officeId, action.payload.ratingData);
         default:
             return state;
     }
 };
 
-const setUser = (state, info) => {
+const setToken = (state, token) => {
     const UserInfo = {
         ...state.UserInfo,
         Quited: false,
-        // Email: info.Email,
-        // FirstName: info.FirstName,
-        // LastName: info.LastName,
+        Token: token,
+    };
+    return {
+        ...state,
+        UserInfo,
+    };
+};
+
+const setUser = (state, info) => {
+    const UserInfo = {
+        ...state.UserInfo,
+        // Quited: false,
+        // Token: info.Token,
+        Email: info.email,
+        FirstName: info.firstName,
+        LastName: info.lastName,
     };
     return {
         ...state,
@@ -152,14 +131,13 @@ const setUser = (state, info) => {
 };
 
 const quitUser = (state) => {
-    console.log(initialState);
     return initialState;
 };
 
 const setOfficeStartDate = (state, date) => {
     const OfficeSearchOptions = {
         ...state.OfficeSearchOptions,
-        StartDate: date,
+        startDate: date,
     };
     return {
         ...state,
@@ -168,7 +146,7 @@ const setOfficeStartDate = (state, date) => {
 };
 
 const setOfficeEndDate = (state, date) => {
-    const OfficeSearchOptions = { ...state.OfficeSearchOptions, EndDate: date };
+    const OfficeSearchOptions = { ...state.OfficeSearchOptions, endDate: date };
     return {
         ...state,
         OfficeSearchOptions,
@@ -176,7 +154,7 @@ const setOfficeEndDate = (state, date) => {
 };
 
 const selectOfficeCity = (state, city) => {
-    const OfficeSearchOptions = { ...state.OfficeSearchOptions, City: city };
+    const OfficeSearchOptions = { ...state.OfficeSearchOptions, city: city };
 
     return {
         ...state,
@@ -187,7 +165,7 @@ const selectOfficeCity = (state, city) => {
 const setSortByPrice = (state, sorting) => {
     const OfficeSearchOptions = {
         ...state.OfficeSearchOptions,
-        SortByPrice: sorting,
+        sortByPrice: sorting,
     };
 
     return {
@@ -200,7 +178,7 @@ const setMinPrice = (state, price) => {
     try {
         const OfficeSearchOptions = {
             ...state.OfficeSearchOptions,
-            MinPrice: parseInt(price),
+            minimumPrice: price === "" ? null : Number(price),
         };
         return {
             ...state,
@@ -216,9 +194,41 @@ const setMaxPrice = (state, price) => {
     try {
         const OfficeSearchOptions = {
             ...state.OfficeSearchOptions,
-            MaxPrice: parseInt(price),
+            maximumPrice: price === "" ? null : Number(price),
         };
 
+        return {
+            ...state,
+            OfficeSearchOptions,
+        };
+    } catch (error) {
+        console.error(error);
+    }
+    return state;
+};
+
+const setMinCapacity = (state, capacity) => {
+    try {
+        const OfficeSearchOptions = {
+            ...state.OfficeSearchOptions,
+            minimumCapacity: capacity === "" ? null : Number(capacity),
+        };
+        return {
+            ...state,
+            OfficeSearchOptions,
+        };
+    } catch (error) {
+        console.error(error);
+    }
+    return state;
+};
+
+const setMaxCapacity = (state, capacity) => {
+    try {
+        const OfficeSearchOptions = {
+            ...state.OfficeSearchOptions,
+            maximumCapacity: capacity === "" ? null : Number(capacity),
+        };
         return {
             ...state,
             OfficeSearchOptions,
@@ -232,7 +242,7 @@ const setMaxPrice = (state, price) => {
 const setMinRating = (state, rating) => {
     const OfficeSearchOptions = {
         ...state.OfficeSearchOptions,
-        MinRating: rating,
+        minimumRating: rating,
     };
     return {
         ...state,
@@ -243,12 +253,19 @@ const setMinRating = (state, rating) => {
 const setWifiOption = (state, wifi) => {
     const OfficeSearchOptions = {
         ...state.OfficeSearchOptions,
-        Wifi: wifi,
+        wifi: wifi,
     };
 
     return {
         ...state,
         OfficeSearchOptions,
+    };
+};
+
+const updateAvailableCities = (state, cities) => {
+    return {
+        ...state,
+        CityData: cities.map((item) => ({ Name: item })),
     };
 };
 
@@ -270,6 +287,20 @@ const updateBookingData = (state, bookingData) => {
     return {
         ...state,
         BookingData: bookingData,
+    };
+};
+
+const updateRatingData = (state, officeId, ratingData) => {
+    const averageRating = ratingData.length
+        ? ratingData.reduce((prev, item) => prev + item.ratingValue, 0)
+        : 0;
+    return {
+        ...state,
+        RatingData: {
+            officeId: officeId,
+            averageRating: averageRating,
+            ratings: ratingData,
+        },
     };
 };
 

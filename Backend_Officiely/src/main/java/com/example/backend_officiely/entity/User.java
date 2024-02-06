@@ -19,44 +19,28 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
-@Table(
-        name = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "email")
-        }
-)
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
 
-    @Column(
-            name = "email",
-            nullable = false
-    )
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(
-            name = "password",
-            nullable = false
-    )
+    @Column(name = "password", nullable = false)
     private String password;
-    @Column(
-            name = "first_name",
-            nullable = false
-    )
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(
-            name = "last_name",
-            nullable = false
-    )
+    @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(
-            name = "role",
-            nullable = false
-    )
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
