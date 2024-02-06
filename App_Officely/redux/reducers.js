@@ -16,12 +16,13 @@ import {
     UPDATE_AVALIABLE_CITIES,
     SET_MIN_CAPACITY,
     SET_MAX_CAPACITY,
+    UPDATE_RATING_DATA,
 } from "./actions";
 
 const initialState = {
     UserInfo: {
         Quited: false,
-        Token: "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6IkFETUlOX1JFQUQsQURNSU5fQ1JFQVRFLEFETUlOX0RFTEVURSxBRE1JTl9VUERBVEUsUk9MRV9BRE1JTiIsInN1YiI6ImJveHVhbi56aGFuZy5zdHVkQHB3LmVkdS5wbCIsImlhdCI6MTcwNzE0OTA2NiwiZXhwIjoxNzA3MjM1NDY2fQ.JPNZnGZeDC9gqr8g5y4sVMkylhLg7ulW3gPji6LsQGDtp41vpOoOzj-i3m_D4tsQ",
+        Token: "eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6IkFETUlOX1JFQUQsQURNSU5fVVBEQVRFLEFETUlOX0RFTEVURSxBRE1JTl9DUkVBVEUsUk9MRV9BRE1JTiIsInN1YiI6ImJveHVhbi56aGFuZy5zdHVkQHB3LmVkdS5wbCIsImlhdCI6MTcwNzIxMjc2MCwiZXhwIjoxNzA3Mjk5MTYwfQ.mM5YcQNxJmwgIWFe-QdqY7bKfdGVuQaHO1if7fu4K0pwQKvyXHNfFVVXlbCwbxiZ",
         Email: "",
         FirstName: "",
         LastName: "",
@@ -31,13 +32,13 @@ const initialState = {
         startDate: "",
         endDate: "",
         city: "",
+        minimumPrice: null,
+        maximumPrice: null,
         sortByPrice: null,
-        minimumPrice: "",
-        maximumPrice: "",
         minimumRating: 0,
-        wifi: false,
-        minimumCapacity: "",
-        maximumCapacity: "",
+        wifi: null,
+        minimumCapacity: null,
+        maximumCapacity: null,
     },
     CityData: [],
     OfficeData: [],
@@ -81,6 +82,8 @@ const rootReducer = (state = initialState, action) => {
             return updateParkingData(state, action.payload);
         case UPDATE_BOOKING_DATA:
             return updateBookingData(state, action.payload);
+        case UPDATE_RATING_DATA:
+            return ;
         default:
             return state;
     }
@@ -161,7 +164,7 @@ const setMinPrice = (state, price) => {
     try {
         const OfficeSearchOptions = {
             ...state.OfficeSearchOptions,
-            minimumPrice: parseInt(price),
+            minimumPrice: price === "" ? null : Number(price),
         };
         return {
             ...state,
@@ -177,7 +180,7 @@ const setMaxPrice = (state, price) => {
     try {
         const OfficeSearchOptions = {
             ...state.OfficeSearchOptions,
-            maximumPrice: parseInt(price),
+            maximumPrice: price === "" ? null : Number(price),
         };
 
         return {
@@ -194,7 +197,7 @@ const setMinCapacity = (state, capacity) => {
     try {
         const OfficeSearchOptions = {
             ...state.OfficeSearchOptions,
-            minimumCapacity: parseInt(capacity),
+            minimumCapacity: capacity === "" ? null : Number(capacity),
         };
         return {
             ...state,
@@ -210,7 +213,7 @@ const setMaxCapacity = (state, capacity) => {
     try {
         const OfficeSearchOptions = {
             ...state.OfficeSearchOptions,
-            maximumCapacity: parseInt(capacity),
+            maximumCapacity: capacity === "" ? null : Number(capacity),
         };
         return {
             ...state,
@@ -270,6 +273,16 @@ const updateBookingData = (state, bookingData) => {
     return {
         ...state,
         BookingData: bookingData,
+    };
+};
+
+const updateRatingData = (state, officeId, bookingData) => {
+    return {
+        ...state,
+        RatingData: {
+            officeId: officeId,
+            bookingData: bookingData,
+        },
     };
 };
 

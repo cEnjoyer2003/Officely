@@ -22,20 +22,25 @@ const OfficeDetailScreen = ({ route, navigation }) => {
     const officeData = route.params.data;
 
     const confirmBookingHandler = () => {
-        dispatch(bookOffice());
+        dispatch(
+            bookOffice({
+                officeId: officeData.officeId,
+                startDate: startDate,
+                endDate: endDate,
+            })
+        );
         setConfirmVisible(false);
         setParkVisible(true);
     };
 
     const confirmToParklyHandler = () => {
-        // dispatch(bookOffice());
         setParkVisible(false);
         // setParkVisible(true);
         navigation.push("Parkly", {});
     };
 
     return (
-        <View>
+        <View style={styles.container}>
             <HeaderBar
                 title={"Office"}
                 back={() => navigation.pop()}
@@ -48,11 +53,8 @@ const OfficeDetailScreen = ({ route, navigation }) => {
             >
                 <View
                     style={{
-                        flex: 1,
-                        flexDirection: "column",
-                        // alignItems: "center",
-                        justifyContent: "space-between",
-                        marginVertical: 10,
+                        marginTop: 40,
+                        marginHorizontal: 30,
                     }}
                 >
                     <Text style={styles.text}>Date:</Text>
@@ -60,22 +62,19 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                         {startDate} - {endDate}
                     </Text>
                     <Divider style={styles.divider}></Divider>
-                    <Text style={styles.text}>
-                        City:{" "}
-                        <Text style={{ color: ThemeColors.Blue }}>{city}</Text>
-                    </Text>
+                    <Text style={styles.text}>City:</Text>
+                    <Text style={{ color: ThemeColors.Blue }}>{city}</Text>
                     <Divider style={styles.divider}></Divider>
                     <Text style={styles.text}>Office Address: </Text>
                     <Text style={[styles.text, { color: ThemeColors.Blue }]}>
-                        {officeData.Address}
+                        {officeData.officeAddress}
                     </Text>
                     <Divider style={styles.divider}></Divider>
                     <Text style={styles.text}>Price: </Text>
                     <Text style={[styles.text, { color: ThemeColors.Blue }]}>
-                        {officeData.Price} PLN
+                        {officeData.price} PLN
                     </Text>
                     <Divider style={styles.divider}></Divider>
-
                 </View>
             </ConfirmBox>
             <ConfirmBox
@@ -91,11 +90,12 @@ const OfficeDetailScreen = ({ route, navigation }) => {
             >
                 <View
                     style={{
-                        flex: 1,
-                        flexDirection: "column",
-                        // alignItems: "center",
-                        justifyContent: "space-between",
+                        // flex: 1,
+                        // flexDirection: "column",
+                        // // alignItems: "center",
+                        // justifyContent: "space-between",
                         marginVertical: 50,
+                        marginHorizontal: 30
                     }}
                 >
                     <Text style={styles.text}>
@@ -112,43 +112,54 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                     </Text>
                 </View>
             </ConfirmBox>
-            <Card style={styles.card}>
-                <Card.Content>
-                    <Image
-                        style={styles.img}
-                        source={{ uri: officeData.PictureUri }}
-                    />
-                    <Text style={styles.title}>{officeData.Name}</Text>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            // flex: 1,
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <View>
-                            <Text>
-                                <Ionicons name="location" style={styles.icon} />
-                                {officeData.Address}
-                            </Text>
-                            <Text>
+
+            <View style={styles.card}>
+                {/* <Card style={styles.card}>
+                <Card.Content> */}
+                <Image
+                    style={styles.img}
+                    source={{ uri: officeData.PictureUri }}
+                />
+                <Text style={styles.title}>{officeData.officeName}</Text>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        // flex: 1,
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <View>
+                        <Text style={styles.text}>
+                            <Ionicons name="location" style={styles.icon} />
+                            {officeData.officeAddress}
+                        </Text>
+                        {/* <Text>
                                 <Ionicons name="star" style={styles.icon} />
                                 {officeData.Rating}
-                            </Text>
-                            <Text>
-                                <Ionicons name="wifi" style={styles.icon} />
-                                {officeData.wifi ? "Wi-Fi" : x}
-                            </Text>
-                            <Text>
-                                <Ionicons name="mail" style={styles.icon} />
-                                {officeData.Contact}
-                            </Text>
-                        </View>
+                            </Text> */}
 
-                        <Text style={styles.subtitle}>
-                            PLN {officeData.Price}
+                        <Text style={styles.text}>
+                            <Ionicons name="mail" style={styles.icon} />
+                            {officeData.contactInfo}
+                        </Text>
+                        <Text style={styles.text}>
+                            <Ionicons name="wifi" style={styles.icon} />
+                            {officeData.wifi ? "Wi-Fi" : "No Wi-fi"}
+                        </Text>
+                        <Text style={[styles.text]}>
+                            <Ionicons style={styles.icon} name="business" />
+                            {officeData.facilities}
+                        </Text>
+                        <Text style={styles.text}>
+                            <Ionicons style={styles.icon} name="people" />
+                            {officeData.capacity}
                         </Text>
                     </View>
+                </View>
+                <View style={styles.bottom}>
+                    <Text style={styles.subtitle}>
+                        {officeData.price.toFixed(2)} PLN
+                    </Text>
                     <Button
                         style={{ marginTop: 10 }}
                         mode="elevated"
@@ -158,16 +169,29 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                     >
                         Book
                     </Button>
-                </Card.Content>
-            </Card>
+                </View>
+                {/* </Card.Content> */}
+                {/* </Card> */}
+            </View>
         </View>
     );
 };
 const styles = StyleSheet.create({
-    card: {
-        marginVertical: 4,
+    container: {
+        flex: 1,
+        flexDirection: "column",
         backgroundColor: ThemeColors.PureWhite,
+    },
+    card: {
+        flex: 1,
+        flexDirection: "column",
+        marginHorizontal: 15,
+        marginVertical: 0,
         overflow: "hidden",
+    },
+    bottom: {
+        flexDirection: "column",
+        alignItems: "flex-end",
     },
     title: {
         fontSize: 22,
@@ -179,18 +203,19 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "right",
         textAlignVertical: "bottom",
+        color: ThemeColors.Blue,
     },
     text: {
-        fontSize: 20,
+        fontSize: 16,
     },
     icon: {
-        margin: 10,
+        color: ThemeColors.Blue,
+        fontSize: 16,
     },
     img: {
         marginRight: -18,
         marginLeft: -18,
         marginTop: -20,
-
         width: Dimensions.get("window").width,
         height: 200,
     },

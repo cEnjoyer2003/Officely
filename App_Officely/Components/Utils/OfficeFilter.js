@@ -23,8 +23,8 @@ import {
     setMinCapacity,
     setMaxCapacity,
 } from "../../redux/actions";
-import { Input } from "@rneui/base";
 import { useEffect, useState } from "react";
+import { MultiStateButton, nextButtonState } from "./MultiStateButton";
 
 const OfficeFilter = ({ visible, dismissHandler }) => {
     const sorting = useSelector(
@@ -40,7 +40,6 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
         (state) => state.OfficeSearchOptions.minimumRating
     );
     const wifi = useSelector((state) => state.OfficeSearchOptions.wifi);
-
     const minCapacity = useSelector(
         (state) => state.OfficeSearchOptions.minimumCapacity
     );
@@ -48,25 +47,42 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
         (state) => state.OfficeSearchOptions.maximumCapacity
     );
 
-    useEffect(() => setLocalRating(rating), [rating]);
-
-    const dispatch = useDispatch();
-
     const [avaiablePriceRange, setPriceAvaiablity] = useState(true);
     const [avaiableCapacityRange, setCapacityAvaiablity] = useState(true);
-
     const [localRating, setLocalRating] = useState(rating);
+    const dispatch = useDispatch();
+
+    const wifiIconsFamily = [
+        {
+            state: null,
+            icon: "wifi",
+            color: ThemeColors.BlueGray,
+        },
+        {
+            state: true,
+            icon: "wifi",
+            color: ThemeColors.Orange,
+        },
+        {
+            state: false,
+            icon: "wifi-off",
+            color: ThemeColors.Blue,
+        },
+    ];
 
     const checkMinMaxPrice = () =>
         setPriceAvaiablity(
-            minPrice <= maxPrice || isNaN(minPrice) || isNaN(maxPrice)
+            minPrice === null || maxPrice === null || minPrice <= maxPrice
         );
+
     const checkMinMaxCapacity = () =>
         setCapacityAvaiablity(
-            minCapacity <= maxCapacity ||
-                isNaN(minCapacity) ||
-                isNaN(maxCapacity)
+            minCapacity === null ||
+                maxCapacity === null ||
+                minCapacity <= maxCapacity
         );
+
+    useEffect(() => setLocalRating(rating), [rating]);
 
     useEffect(() => {
         checkMinMaxPrice();
@@ -125,7 +141,9 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                                 keyboardType="numeric"
                                 mode="outlined"
                                 label="min"
-                                value={isNaN(minPrice) ? "" : String(minPrice)}
+                                value={
+                                    minPrice === null ? "" : String(minPrice)
+                                }
                                 onChangeText={(value) => {
                                     dispatch(
                                         setMinPrice(
@@ -141,7 +159,9 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                                 outlineColor={ThemeColors.Orange}
                                 mode="outlined"
                                 label="max"
-                                value={isNaN(maxPrice) ? "" : String(maxPrice)}
+                                value={
+                                    maxPrice === null ? "" : String(maxPrice)
+                                }
                                 onChangeText={(value) => {
                                     dispatch(
                                         setMaxPrice(
@@ -172,7 +192,7 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                                 mode="outlined"
                                 label="min"
                                 value={
-                                    isNaN(minCapacity)
+                                    minCapacity === null
                                         ? ""
                                         : String(minCapacity)
                                 }
@@ -192,7 +212,7 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                                 mode="outlined"
                                 label="max"
                                 value={
-                                    isNaN(maxCapacity)
+                                    maxCapacity === null
                                         ? ""
                                         : String(maxCapacity)
                                 }
@@ -241,9 +261,9 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                         </View>
                         <Divider style={styles.divider}></Divider>
 
-                        <Text style={styles.subtitle}>Facility</Text>
-                        <IconButton
-                            icon="wifi"
+                        <Text style={styles.subtitle}>Wi-Fi</Text>
+                        {/* <IconButton
+                            icon="wifi-off"
                             iconColor={
                                 wifi ? ThemeColors.Orange : ThemeColors.BlueGray
                             }
@@ -251,7 +271,20 @@ const OfficeFilter = ({ visible, dismissHandler }) => {
                             size={25}
                             selected={wifi}
                             onPress={() => dispatch(setWifiOption(!wifi))}
-                        />
+                        /> */}
+                        <MultiStateButton
+                            style={[styles.buttons, {marginLeft: 10}]}
+                            icons={wifiIconsFamily}
+                            state={wifi}
+                            size={25}
+                            onPress={() => {
+                                dispatch(
+                                    setWifiOption(
+                                        nextButtonState(wifiIconsFamily, wifi)
+                                    )
+                                );
+                            }}
+                        ></MultiStateButton>
                     </Card.Content>
                 </Card>
             </Modal>
@@ -266,7 +299,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         // backgroundColor: ThemeColors.PureWhite,
         // padding: 20,
-        height: 600,
+        height: 450,
+        marginTop: 150,
 
         // : "center",
     },
@@ -274,11 +308,9 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         // alignItems: "baseline",
-        // justifyContent: "space-between",
+        justifyContent: "space-between",
         marginHorizontal: 20,
-        marginTop: 150,
-        height: 500,
-        width: 300,
+        width: 350,
         backgroundColor: ThemeColors.PureWhite,
         // marginTop: 50,
         // marginBottom: 50,
@@ -299,12 +331,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "",
     },
     input: {
         height: 30,
         marginHorizontal: 10,
         backgroundColor: ThemeColors.White,
+        marginBottom: 20
     },
 });
 export default OfficeFilter;

@@ -6,9 +6,11 @@ import {
     setToken,
     setUser,
     updateAvailableCities,
+    updateBookingData,
     updateOfficeData,
 } from "./actions";
 
+const MAX_INT = 1000000;
 const MOCK = false;
 // const BASE_URL = "https://officelyapp.azurewebsites.net/api";
 const BASE_URL = MOCK
@@ -37,9 +39,6 @@ export const login = (options) => async (dispatch, getState) => {
 
 export const register = (options) => async (dispatch, getState) => {
     try {
-        // const register = {
-        //     "firstName": options.firstName,
-        // }
         const destination = `${BASE_URL}/auth/register`;
         const response = await fetch(destination, {
             method: "POST",
@@ -57,28 +56,26 @@ export const register = (options) => async (dispatch, getState) => {
     }
 };
 
-export const resetPasswordWithToken = (options) => async (dispatch, getState) => {
-    try {
-        // const register = {
-        //     "firstName": options.firstName,
-        // }
-        const destination = `${BASE_URL}/auth/change-password`;
-        const response = await fetch(destination, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${getState().UserInfo.Token}`,
-            },
-            body: JSON.stringify(options),
-        }).then((resp) => {
-            if (resp.ok) return resp.json();
-            else throw resp;
-        });
-        // console.log(response);
-    } catch (e) {
-        console.error(e);
-    }
-};
+export const resetPasswordWithToken =
+    (options) => async (dispatch, getState) => {
+        try {
+            const destination = `${BASE_URL}/auth/change-password`;
+            const response = await fetch(destination, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${getState().UserInfo.Token}`,
+                },
+                body: JSON.stringify(options),
+            }).then((resp) => {
+                if (resp.ok) return resp.json();
+                else throw resp;
+            });
+            // console.log(response);
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
 export const fetchUserInfo = () => async (dispatch, getState) => {
     try {
@@ -92,15 +89,11 @@ export const fetchUserInfo = () => async (dispatch, getState) => {
             if (resp.ok) return resp.json();
             else throw resp;
         });
-        dispatch(setUser(response))
+        dispatch(setUser(response));
     } catch (e) {
         console.error(e.message);
     }
 };
-// export const quitAcc = () => async (dispatch, getState) => {
-//     try {
-//     }
-// }
 
 export const fetchAvaliableCities = () => async (dispatch, getState) => {
     try {
@@ -116,74 +109,59 @@ export const fetchAvaliableCities = () => async (dispatch, getState) => {
         });
 
         const cities = [...new Set(response.map((item) => item.city))];
-        // console.log(cities);
         dispatch(updateAvailableCities(cities));
-        // dispatch(setListLiked(response));
     } catch (e) {
         console.error(e.message);
     }
 };
 
-const filterParams = (key, item) => {
-    if (item === null || item === "") return false;
-
-    switch (key) {
-        case "wifi":
-            return item;
-        case "minimumRating":
-            return item !== 0;
-        default:
-            return true;
-    }
-};
-
-const formatParams = (key, item) => {
-    // console.log(key);
-    // console.log(item);
-
-    switch (key) {
-        case "startDate":
-            return `${key}=${item}T00:00:00`;
-        case "endDate":
-            return `${key}=${item}T00:00:00`;
-        case "minimumRating":
-            return `${key}=${item}`;
-        default:
-            return `${key}=${item}`;
-    }
-};
-
-const encodeParams = (data) => {
-    return Object.entries(data)
-        .filter(([key, item]) => filterParams(key, item))
-        .map(([key, item]) => formatParams(key, item))
-        .join("&");
-};
+const formatSearchOptions = (data) => ({
+    startDateTime: `${data.startDate}T00:00:00`,
+    endDateTime: `${data.endDate}T00:00:00`,
+    city: data.city,
+    minimumPrice: data.minimumPrice === null ? 0 : Number(data.minimumPrice),
+    maximumPrice:
+        data.maximumPrice === null || data.maximumPrice < data.minimumPrice
+            ? MAX_INT
+            : Number(data.maximumPrice),
+    minimumCapacity:
+        data.minimumCapacity === null ? 0 : Number(data.minimumCapacity),
+    maximumCapacity:
+        data.maximumCapacity === null ||
+        data.maximumCapacity < data.minimumCapacity
+            ? MAX_INT
+            : Number(data.maximumCapacity),
+    minimumRating: data.minimumRating,
+    wifi: data.wifi,
+    sortByPrice: data.sortByPrice,
+});
 
 export const searchOffice = () => async (dispatch, getState) => {
     try {
         const state = getState();
-        const searchParams = encodeParams(state.OfficeSearchOptions);
+        const options = formatSearchOptions(state.OfficeSearchOptions);
         const destination = MOCK
             ? `${BASE_URL}/office`
-            : `${BASE_URL}/office/search?${searchParams}`;
+            : `${BASE_URL}/office/search`;
 
         console.log(`Fetching from: ${destination}`);
+        console.log(options);
 
-        // const token = state.UserInfo.Token;
         const response = await fetch(destination, {
-            method: "GET",
+            method: "POST",
             headers: {
                 Authorization: `Bearer ${getState().UserInfo.Token}`,
-                // "Content-Type": "application/json",
+                "Content-Type": "application/json",
             },
+            body: JSON.stringify(options),
         }).then((resp) => {
             if (resp.ok) return resp.json();
-            else throw resp;
+            else throw resp.json();
         });
+        console.log(response);
         dispatch(updateOfficeData(response));
     } catch (e) {
-        console.error(e.message);
+        console.error(e);
     }
 };
 
@@ -192,17 +170,75 @@ export const searchParking = (options) => async (dispatch, getState) => {
 };
 
 export const bookOffice = (options) => async (dispatch, getState) => {
-    // TODO
+    try {
+        // const state = getState();
+        // const options = formatSearchOptions(state.OfficeSearchOptions);
+        const destination = `${BASE_URL}/booking/${options.officeId}`;
+        const body = {
+            officeId: options.officeId,
+            startDateTime: `${options.startDate}T00:00:00`,
+            endDateTime: `${options.endDate}T00:00:00`,
+        };
+        // console.log(`Fetching from: ${destination}`);
+        // console.log(options);
+
+        const response = await fetch(destination, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${getState().UserInfo.Token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        }).then((resp) => {
+            if (resp.ok) return resp.json();
+            else throw resp.json();
+        });
+        console.log(response);
+        dispatch(updateOfficeData(response));
+    } catch (e) {
+        console.error(e);
+    }
 };
 
 export const bookParking = (options) => async (dispatch, getState) => {
     // TODO
 };
 
-export const fetchAllBookings = (options) => async (dispatch, getState) => {
-    // TODO
+export const fetchMyBookings = (options) => async (dispatch, getState) => {
+    try {
+        const response = await fetch(`${BASE_URL}/booking/my-bookings`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${getState().UserInfo.Token}`,
+            },
+        }).then((resp) => {
+            if (resp.ok) return resp.json();
+            else throw resp;
+        });
+
+        // const cities = [...new Set(response.map((item) => item.city))];
+        dispatch(updateBookingData(response));
+    } catch (e) {
+        console.error(e.message);
+    }
 };
 
-export const cancelBooking = (options) => async (dispatch, getState) => {
-    // TODO
+export const cancelBooking = (bookingId) => async (dispatch, getState) => {
+    try {
+        const destination = `${BASE_URL}/booking/${bookingId}`
+        const response = await fetch(destination, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${getState().UserInfo.Token}`,
+            },
+        }).then((resp) => {
+            if (resp.ok) return resp.json();
+            else throw resp;
+        });
+
+        // const cities = [...new Set(response.map((item) => item.city))];
+        // dispatch(updateBookingData(response));
+    } catch (e) {
+        console.error(e.message);
+    }
 };

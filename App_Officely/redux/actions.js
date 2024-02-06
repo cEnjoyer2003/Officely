@@ -17,6 +17,8 @@ export const UPDATE_AVALIABLE_CITIES = "UPDATE_AVALIABLE_CITIES";
 export const UPDATE_OFFICE_DATA = "UPDATE_OFFICE_DATA";
 export const UPDATE_PARKING_DATA = "UPDATE_PARKING_DATA";
 export const UPDATE_BOOKING_DATA = "UPDATE_BOOKING_DATA";
+export const UPDATE_RATING_DATA = "UPDATE_RATING_DATA";
+
 
 export const setToken = (token) => ({
     type: SET_TOKEN,
@@ -101,4 +103,12 @@ export const updateParkingData = (parkingData) => ({
 export const updateBookingData = (bookingData) => ({
     type: UPDATE_BOOKING_DATA,
     payload: bookingData,
+});
+
+export const updateRatingData = (officeId, ratingData) => ({
+    type: UPDATE_RATING_DATA,
+    payload: {
+        officeId,
+        ratingData
+    },
 });
