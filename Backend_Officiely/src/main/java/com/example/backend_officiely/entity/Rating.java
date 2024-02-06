@@ -11,12 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(
-        name = "rating",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "rating_id")
-        }
-)
+@Table(name = "rating", uniqueConstraints = {@UniqueConstraint(columnNames = "rating_id")})
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,15 +25,9 @@ public class Rating {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(
-            name = "rating_value",
-            nullable = false
-    )
+    @Column(name = "rating_value", nullable = false)
     private double ratingValue;
 
-    @Column(
-            name = "comment",
-            nullable = false
-    )
+    @Column(name = "comment", nullable = false)
     private String comment;
 }

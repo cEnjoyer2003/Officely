@@ -18,4 +18,6 @@ public interface BookingService {
     BookingResponse updateBooking(String bookingId, BookingDto bookingDto);
 
     BookingResponse createBooking(String officeId, BookingDto bookingDto);
+
+    List<BookingResponse> getBookingsByOfficeName(String officeName);
 }

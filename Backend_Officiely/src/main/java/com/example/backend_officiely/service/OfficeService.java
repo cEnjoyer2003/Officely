@@ -22,4 +22,6 @@ public interface OfficeService {
     List<OfficeResponse> searchOfficeByParams(SearchParams searchParams);
 
     OfficeResponse updateOffice(OfficeDto officeDto, String officeId);
+
+    List<OfficeResponse> searchOfficeByName(String officeName);
 }

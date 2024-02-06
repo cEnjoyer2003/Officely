@@ -31,13 +31,12 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public RatingResponse updateRating(String RatingId, RatingDto ratingDto) {
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user.getUserId().equals(ratingRepository.findByRatingId(RatingId).getUser().getUserId())){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getUserId().equals(ratingRepository.findByRatingId(RatingId).getUser().getUserId())) {
             Rating rating = mapToEntity(ratingRepository.findByRatingId(RatingId).getOffice().getOfficeId(), ratingDto);
             rating.setRatingId(RatingId);
             return mapToResponse(ratingRepository.save(rating));
-        }
-        else{
+        } else {
             return null;
         }
     }
@@ -45,18 +44,18 @@ public class RatingServiceImpl implements RatingService {
     @Transactional
     @Override
     public Long deleteRating(String RatingId) {
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user.getUserId().equals(ratingRepository.findByRatingId(RatingId).getUser().getUserId())){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user.getUserId().equals(ratingRepository.findByRatingId(RatingId).getUser().getUserId())) {
             return ratingRepository.deleteByRatingId(RatingId);
-        }
-        else{
+        } else {
             return null;
         }
     }
 
     @Override
-    public List<RatingResponse> getRatingByUserId(String userId) {
-        return ratingRepository.findByUser_UserId(userId).stream().map(this::mapToResponse).toList();
+    public List<RatingResponse> getRatingByUserId() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ratingRepository.findByUser_UserId(user.getUserId()).stream().map(this::mapToResponse).toList();
     }
 
     @Override
@@ -74,7 +73,7 @@ public class RatingServiceImpl implements RatingService {
                 .build();
     }
 
-    private RatingResponse mapToResponse(Rating rating){
+    private RatingResponse mapToResponse(Rating rating) {
         return RatingResponse.builder()
                 .ratingId(rating.getRatingId()).officeName(rating.getOffice().getOfficeName())
                 .userFirstName(rating.getUser().getFirstName()).userLastName(rating.getUser().getLastName())

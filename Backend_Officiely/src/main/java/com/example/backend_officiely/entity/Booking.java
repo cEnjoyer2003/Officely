@@ -31,15 +31,20 @@ public class Booking {
     private User user;
 
     @Column(
-            name="StartDateTime",
+            name = "StartDateTime",
             nullable = false
     )
     private String startDateTime;
 
     @Column(
-            name="EndDateTime",
+            name = "EndDateTime",
             nullable = false
     )
     private String endDateTime;
+    @Column(
+            name = "origin",
+            nullable = true
+    )
+    private String origin;
 
 }

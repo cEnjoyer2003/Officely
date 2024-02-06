@@ -3,6 +3,8 @@ package com.example.backend_officiely.service;
 import com.example.backend_officiely.dtos.UserDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 public interface UserService {
 
@@ -10,5 +12,9 @@ public interface UserService {
 
     Long deleteUser(String userId);
 
-    boolean updateUser(UserDto userDto);
+    UserDto updateUser(UserDto userDto);
+
+    UserDto getUserByEmail(String email);
+
+    List<UserDto> getAllUsers();
 }
