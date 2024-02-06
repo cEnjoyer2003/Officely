@@ -60,7 +60,7 @@ public class Office {
     )
     private String city;
     @Column(
-            name="capacity",
+            name = "capacity",
             nullable = false
     )
     private double capacity;
@@ -69,5 +69,7 @@ public class Office {
             nullable = false
     )
     private URL officeImage;
+    @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
 }

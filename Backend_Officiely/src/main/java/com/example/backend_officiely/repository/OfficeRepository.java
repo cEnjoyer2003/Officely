@@ -10,12 +10,11 @@ import java.util.List;
 public interface OfficeRepository extends JpaRepository<Office, String> {
 
 
-
-
     Office findByOfficeId(String OfficeId);
 
     List<Office> findByPriceGreaterThanEqualAndPriceLessThanEqualAndCapacityLessThanEqualAndCapacityGreaterThanEqual(double minimumPrice, double maximumPrice, double maximumCapacity, double minimumCapacity);
 
     long deleteByOfficeId(String officeId);
 
+    List<Office> findByOfficeNameContains(String officeName);
 }

@@ -12,7 +12,7 @@ public interface RatingService {
 
     Long deleteRating(String officeId);
 
-    List<RatingResponse> getRatingByUserId(String userId);
+    List<RatingResponse> getRatingByUserId();
 
     RatingResponse addRating(String officeId, RatingDto ratingDto);
 }

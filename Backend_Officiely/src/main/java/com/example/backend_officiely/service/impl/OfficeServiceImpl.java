@@ -16,23 +16,27 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OfficeServiceImpl implements OfficeService {
     private final OfficeRepository officeRepository;
     private final BookingRepository bookingRepository;
     private final RatingRepository ratingRepository;
+
     @Autowired
-    public OfficeServiceImpl(OfficeRepository officeRepository , BookingRepository bookingRepository, RatingRepository ratingRepository) {
-        this.bookingRepository= bookingRepository;
+    public OfficeServiceImpl(OfficeRepository officeRepository, BookingRepository bookingRepository, RatingRepository ratingRepository) {
+        this.bookingRepository = bookingRepository;
         this.officeRepository = officeRepository;
         this.ratingRepository = ratingRepository;
     }
+
     @Override
     public List<OfficeResponse> getAllOffices() {
-         List<Office> offices = officeRepository.findAll();
-            return offices.stream().map(this::mapToResponse).toList();
+        List<Office> offices = officeRepository.findAll();
+        return offices.stream().map(this::mapToResponse).toList();
     }
 
     @Override
@@ -41,6 +45,7 @@ public class OfficeServiceImpl implements OfficeService {
         Office savedOffice = officeRepository.save(office);
         return mapToResponse(savedOffice);
     }
+
     @Transactional
     @Override
     public Long deleteOffice(String id) {
@@ -55,23 +60,35 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     public List<OfficeResponse> searchOfficeByParams(SearchParams searchParams) {
-       List<Office> offices = officeRepository.findByPriceGreaterThanEqualAndPriceLessThanEqualAndCapacityLessThanEqualAndCapacityGreaterThanEqual(searchParams.getMinimumPrice(),searchParams.getMaximumPrice(),searchParams.getMaximumCapacity(),searchParams.getMinimumCapacity());
-       if(searchParams.getCity()!=null){
-           offices = offices.stream().filter(office -> office.getCity().equals(searchParams.getCity())).toList();
-       }
-       if(searchParams.isWifi()){
-           offices = offices.stream().filter(office -> office.isWifi()==searchParams.isWifi()).toList();
-       }
-       offices = offices.stream().filter(office -> isOfficeAvailable(office,searchParams.getStartDateTime(),searchParams.getEndDateTime())).toList();
-       offices = offices.stream().filter(office -> ratingRepository.findByOffice_OfficeId(office.getOfficeId()).stream().mapToDouble(Rating::getRatingValue).average().orElse(0)>=searchParams.getMinimumRating()).toList();
-       if(searchParams.getSortByPrice()!=null){
-           if(searchParams.getSortByPrice().equals("asc")){
-               offices.sort((o1, o2) -> (int) (o1.getPrice()-o2.getPrice()));
-           }
-           else if(searchParams.getSortByPrice().equals("desc")){
-               offices.sort((o1, o2) -> (int) (o2.getPrice()-o1.getPrice()));
-           }
-       }
+        List<Office> offices = officeRepository.findByPriceGreaterThanEqualAndPriceLessThanEqualAndCapacityLessThanEqualAndCapacityGreaterThanEqual(searchParams.getMinimumPrice(), searchParams.getMaximumPrice(), searchParams.getMaximumCapacity(), searchParams.getMinimumCapacity());
+        if (searchParams.getCity() != null) {
+            offices = offices.stream().filter(office -> office.getCity().equals(searchParams.getCity())).toList();
+        }
+        if (searchParams.isWifi()) {
+            offices = offices.stream().filter(office -> office.isWifi() == searchParams.isWifi()).toList();
+        }
+        offices = offices.stream().filter(office -> isOfficeAvailable(office, searchParams.getStartDateTime(), searchParams.getEndDateTime())).toList();
+        offices = offices.stream()
+                .filter(office -> {
+                    List<Rating> ratings = ratingRepository.findByOffice_OfficeId(office.getOfficeId());
+                    if (ratings.isEmpty()) {
+                        return true;
+                    }
+                    double averageRating = ratings.stream().mapToDouble(Rating::getRatingValue).average().orElse(0);
+                    return averageRating >= searchParams.getMinimumRating();
+                })
+                .toList();
+        if (searchParams.getSortByPrice() != null) {
+            if (searchParams.getSortByPrice().equals("asc")) {
+                offices = offices.stream()
+                        .sorted(Comparator.comparingDouble(Office::getPrice))
+                        .collect(Collectors.toList());
+            } else if (searchParams.getSortByPrice().equals("desc")) {
+                offices = offices.stream()
+                        .sorted(Comparator.comparingDouble(Office::getPrice).reversed())
+                        .collect(Collectors.toList());
+            }
+        }
         return offices.stream().map(this::mapToResponse).toList();
     }
 
@@ -83,8 +100,14 @@ public class OfficeServiceImpl implements OfficeService {
         return mapToResponse(savedOffice);
     }
 
+    @Override
+    public List<OfficeResponse> searchOfficeByName(String officeName) {
+        List<Office> offices = officeRepository.findByOfficeNameContains(officeName);
+        return offices.stream().map(this::mapToResponse).toList();
+    }
 
-    private OfficeResponse mapToResponse(Office office){
+
+    private OfficeResponse mapToResponse(Office office) {
         return OfficeResponse.builder()
                 .officeId(office.getOfficeId())
                 .officeName(office.getOfficeName())
@@ -92,14 +115,16 @@ public class OfficeServiceImpl implements OfficeService {
                 .contactInfo(office.getContactInfo()).price(office.getPrice())
                 .wifi(office.isWifi()).city(office.getCity()).capacity(office.getCapacity()).image(office.getOfficeImage()).build();
     }
-    private Office mapToEntity(OfficeDto officeDto){
+
+    private Office mapToEntity(OfficeDto officeDto) {
         return Office.builder()
                 .officeName(officeDto.getOfficeName())
                 .officeAddress(officeDto.getOfficeAddress()).facilities(officeDto.getFacilities())
                 .contactInfo(officeDto.getContactInfo()).price(officeDto.getPrice())
                 .wifi(officeDto.isWifi()).city(officeDto.getCity()).capacity(officeDto.getCapacity()).officeImage(officeDto.getImage()).build();
     }
-    private boolean isOfficeAvailable(Office office , String startDate , String endDate) {
+
+    private boolean isOfficeAvailable(Office office, String startDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime officeStart = LocalDateTime.parse(startDate, formatter);
         LocalDateTime officeEnd = LocalDateTime.parse(endDate, formatter);
@@ -110,7 +135,7 @@ public class OfficeServiceImpl implements OfficeService {
         for (Booking booking : bookings) {
             LocalDateTime bookingStart = LocalDateTime.parse(booking.getStartDateTime(), formatter);
             LocalDateTime bookingEnd = LocalDateTime.parse(booking.getEndDateTime(), formatter);
-            if((officeEnd.isAfter(bookingStart) && officeStart.isBefore(bookingEnd)) || (officeStart.isBefore(bookingEnd) && officeEnd.isAfter(bookingStart))){
+            if ((officeEnd.isAfter(bookingStart) && officeStart.isBefore(bookingEnd)) || (officeStart.isBefore(bookingEnd) && officeEnd.isAfter(bookingStart))) {
                 return false;
             }
         }
