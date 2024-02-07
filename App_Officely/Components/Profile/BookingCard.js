@@ -25,7 +25,7 @@ const BookingCard = ({ data: bookingData, navigation }) => {
             setCost(
                 calculateCost(startDate, endDate, bookingData.office.price)
             ),
-        []
+        [bookingData]
     );
     return (
         <TouchableOpacity

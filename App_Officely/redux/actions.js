@@ -1,6 +1,7 @@
 export const SET_TOKEN = "SET_TOKEN";
 export const SET_USER = "SET_USER";
 export const QUIT_USER = "QUIT_USER";
+export const SET_CARLY = "SET_CARLY";
 
 export const SET_OFFICE_START_DATE = "SET_OFFICE_START_DATE";
 export const SET_OFFICE_END_DATE = "SET_OFFICE_END_DATE";
@@ -15,9 +16,10 @@ export const SET_WIFI_OPTION = "SET_WIFI_OPTION";
 
 export const UPDATE_AVALIABLE_CITIES = "UPDATE_AVALIABLE_CITIES";
 export const UPDATE_OFFICE_DATA = "UPDATE_OFFICE_DATA";
-export const UPDATE_PARKING_DATA = "UPDATE_PARKING_DATA";
+export const UPDATE_CARLY_DATA = "UPDATE_CARLY_DATA";
 export const UPDATE_BOOKING_DATA = "UPDATE_BOOKING_DATA";
 export const UPDATE_RATING_DATA = "UPDATE_RATING_DATA";
+export const UPDATE_CARLY_BOOKING = "UPDATE_CARLY_BOOKING";
 
 
 export const setToken = (token) => ({
@@ -27,6 +29,11 @@ export const setToken = (token) => ({
 
 export const setUser = (info) => ({
     type: SET_USER,
+    payload: info,
+});
+
+export const setCarlyUser = (info) => ({
+    type: SET_CARLY,
     payload: info,
 });
 
@@ -95,9 +102,14 @@ export const updateOfficeData = (officeData) => ({
     payload: officeData,
 });
 
-export const updateParkingData = (parkingData) => ({
-    type: UPDATE_PARKING_DATA,
-    payload: parkingData,
+export const updateCarlyData = (carlyData) => ({
+    type: UPDATE_CARLY_DATA,
+    payload: carlyData,
+});
+
+export const updateCarlyBooking = (data) => ({
+    type: UPDATE_CARLY_BOOKING,
+    payload: data,
 });
 
 export const updateBookingData = (bookingData) => ({

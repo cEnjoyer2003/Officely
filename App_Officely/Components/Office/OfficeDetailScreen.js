@@ -13,9 +13,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import ConfirmBox from "../Utils/ConfirmBox";
 import { useState, useEffect } from "react";
 import HeaderBar from "../Utils/HeaderBar";
-import { bookOffice, fetchRating } from "../../redux/thunk";
+import { bookOffice, fetchCarly, fetchRating } from "../../redux/thunk";
 import RatingCard from "../Rating/RatingCard";
 import { calculateCost } from "../Utils/utils";
+import { updateCarlyData } from "../../redux/actions";
 
 const OfficeDetailScreen = ({ route, navigation }) => {
     const startDate = useSelector(
@@ -46,10 +47,11 @@ const OfficeDetailScreen = ({ route, navigation }) => {
         setParkVisible(true);
     };
 
-    const confirmToParklyHandler = () => {
+    const confirmToCarlyHandler = () => {
         setParkVisible(false);
         // setParkVisible(true);
-        navigation.push("Parkly", {});
+        dispatch(fetchCarly())
+        navigation.push("Carly", {});
     };
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
@@ -111,7 +113,7 @@ const OfficeDetailScreen = ({ route, navigation }) => {
                     </>
                 }
                 cancelHandler={() => setParkVisible(false)}
-                confirmHandler={confirmToParklyHandler}
+                confirmHandler={confirmToCarlyHandler}
             >
                 <View
                     style={{

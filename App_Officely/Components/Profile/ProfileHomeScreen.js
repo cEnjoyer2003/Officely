@@ -10,10 +10,12 @@ import { ThemeColors } from "../Utils/Colors";
 import HeaderBar from "../Utils/HeaderBar";
 import { fetchMyBookings, fetchUserInfo } from "../../redux/thunk";
 import BookingCard from "./BookingCard";
-
+import CarlyBookCard from "../Carly/CarlyBookCard";
 
 const ProfileHomeScreen = ({ navigation }) => {
-    const bookingData = useSelector((state)=>state.BookingData);
+    const bookingData = useSelector((state) => state.BookingData);
+    const carlyBooking = useSelector((state) => state.CarlyBooking);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -53,9 +55,11 @@ const ProfileHomeScreen = ({ navigation }) => {
                     </View>
                 </View>
             </Appbar.Header>
-            <Text  style={[styles.title, {textAlign: "center"}]}>My Bookings</Text>
+            <Text style={[styles.title, { textAlign: "center" }]}>
+                My Bookings
+            </Text>
             <View style={styles.containerList}>
-                <FlatList
+                {/* <FlatList
                     data={bookingData}
                     renderItem={({ item }) => (
                         <BookingCard
@@ -63,6 +67,26 @@ const ProfileHomeScreen = ({ navigation }) => {
                             navigation={navigation}
                         ></BookingCard>
                     )}
+                    // refreshControl={
+                    //     <RefreshControl
+                    //         refreshing={refreshing}
+                    //         onRefresh={onRefresh}
+                    //         colors={["#009688"]}
+                    //     />
+                    // }
+                ></FlatList> */}
+                <FlatList
+                    data={[...carlyBooking, ...bookingData]}
+                    renderItem={({ item }) =>
+                        item.carId ? (
+                            <CarlyBookCard data={item}></CarlyBookCard>
+                        ) : (
+                            <BookingCard
+                                data={item}
+                                navigation={navigation}
+                            ></BookingCard>
+                        )
+                    }
                     // refreshControl={
                     //     <RefreshControl
                     //         refreshing={refreshing}
